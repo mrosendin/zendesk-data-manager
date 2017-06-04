@@ -1,0 +1,17 @@
+{
+  "name": "Data Manager",
+  "author": {
+    "name": "Matthew Rosendin",
+    "email": "matt@roseware.io",
+    "url": "https://roseware.io"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "nav_bar": "assets/index.html"
+    }
+  },
+  "version": "1.0",
+  "frameworkVersion": "2.0"
+}
