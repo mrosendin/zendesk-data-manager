@@ -57,6 +57,14 @@ export default {
     bus.$on('menuToggled', (menuOpen) => {
       this.menuOpen = menuOpen
     })
+  },
+  mounted () {
+    // Need to set the columns, since in other files this is normally triggered
+    // when getting custom fields
+    bus.$emit('columnToggled', this.columns)
+  },
+  updated () {
+    bus.$emit('columnToggled', this.columns)
   }
 }
 </script>

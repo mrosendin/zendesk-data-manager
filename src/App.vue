@@ -18,8 +18,6 @@
         </div>
       </div>
 
-      <hr>
-
       <div class="columns results">
         <div class="column">
           <results :columns="columns"></results>
@@ -27,17 +25,20 @@
       </div>
 
     </div>
+
+    <app-footer/>
   </div>
 </template>
 
 <script>
 import Sidebar from './components/Sidebar.vue'
 import Results from './components/Results.vue'
+import AppFooter from './components/AppFooter.vue'
 import bus from './bus.js'
 
 export default {
   name: 'app',
-  components: { Sidebar, Results },
+  components: { Sidebar, Results, AppFooter },
   data () {
     return {
       columns: [],
@@ -48,6 +49,12 @@ export default {
     toggleMenu () {
       this.menuOpen = !this.menuOpen
       bus.$emit('menuToggled', this.menuOpen)
+    }
+  },
+  watch: {
+    '$route' () {
+      console.log('Route changed. Clearing columns.')
+      this.columns = []
     }
   },
   created () {

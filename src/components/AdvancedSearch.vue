@@ -90,6 +90,11 @@ export default {
       this.role = `role:${role}`
     })
   },
+  beforeDestroy () {
+    // TODO: May want to create a seprate event name for clearing out the
+    // search results when the route is changed.
+    bus.$emit('results-fetched', [])
+  },
   methods: {
     search () {
       console.log(`Searching for ${this.type}`)

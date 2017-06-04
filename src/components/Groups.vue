@@ -38,6 +38,7 @@ import DateFilter from './DateFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
 import Results from './Results.vue'
+import bus from '../bus.js'
 
 export default {
   name: 'groups',
@@ -55,6 +56,14 @@ export default {
         name: ''
       }
     }
+  },
+  mounted () {
+    // Need to set the columns, since in other files this is normally triggered
+    // when getting custom fields
+    bus.$emit('columnToggled', this.columns)
+  },
+  updated () {
+    bus.$emit('columnToggled', this.columns)
   }
 }
 </script>
