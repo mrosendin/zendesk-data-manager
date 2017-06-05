@@ -27,6 +27,7 @@ import AppHeader from './components/AppHeader.vue'
 import Results from './components/Results.vue'
 import AppFooter from './components/AppFooter.vue'
 import bus from './bus.js'
+import config from './config.js'
 
 export default {
   name: 'app',
@@ -50,6 +51,14 @@ export default {
     }
   },
   created () {
+    // Get subdomain, current user information, etc.
+    client.get('currentAccount').then((data) => {
+      config.currentAccount = data['currentAccount']
+      client.get('currentUser').then((data) => {
+        config.currentUser = data['currentUser']
+      })
+    })
+
     console.log(this.$route)
     bus.$on('columnToggled', (columns) => {
       this.columns = columns

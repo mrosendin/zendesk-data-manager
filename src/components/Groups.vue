@@ -46,7 +46,6 @@ export default {
     return {
       columns: [
         { name: 'Id', value: 'id', selected: true },
-        { name: 'Result Type', value: 'result_type', selected: true },
         { name: 'Name', value: 'name', selected: true },
         { name: 'Created At', value: 'created_at', selected: true },
         { name: 'Updated At', value: 'updated_at', selected: true }

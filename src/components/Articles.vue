@@ -37,16 +37,9 @@ export default {
     return {
       columns: [
         { name: 'Id', value: 'id', selected: true },
-        { name: 'Result Type', value: 'result_type', selected: true },
         { name: 'Title', value: 'title', selected: true },
         { name: 'Locale', value: 'locale', selected: true },
         { name: 'Brand Name', value: 'brand_name', selected: true },
-        { name: 'Brand Id', value: 'brand_id', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true },
-        { name: 'Brand Id', value: 'brand_id', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true },
         { name: 'Brand Id', value: 'brand_id', selected: true },
         { name: 'Created At', value: 'created_at', selected: true },
         { name: 'Updated At', value: 'updated_at', selected: true }

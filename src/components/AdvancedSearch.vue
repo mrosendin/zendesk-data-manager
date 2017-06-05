@@ -101,7 +101,7 @@ export default {
 
       client.request(`/api/v2/search.json?query=${encodeURIComponent(this.query)}`)
         .then((data) => {
-          bus.$emit('results-fetched', data.results)
+          bus.$emit('results-fetched', data.results, this.type)
         }).catch((error) => {
           this.error = error.responseJSON.description
         })

@@ -42,7 +42,12 @@
           <tbody>
             <tr v-for="result in results">
               <td><input type="checkbox" v-model="selected" :value="result.id" number></td>
-              <td v-for="column in columns" v-if="column.selected">{{result[column.value]}}</td>
+              <td v-for="column in columns" v-if="column.selected">
+                <template v-if="column.value === 'id' && type !== 'group'">
+                  <a target="blank" :href="buildUrl(result)" >{{result[column.value]}}</a>
+                </template>
+                <template v-else>{{result[column.value]}}</template>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -55,6 +60,7 @@
 <script>
 import Heading from './Heading.vue'
 import bus from '../bus.js'
+import config from '../config.js'
 
 export default {
   name: 'results',
@@ -99,13 +105,23 @@ export default {
     }
   },
   methods: {
+    buildUrl (result) {
+      console.log('Method call to buildUrl()')
+      let base = `https://${config.currentAccount.subdomain}.zendesk.com`
+      if (this.type === 'article') return `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
+      if (this.type === 'organization') return `${base}/agent/organizations/${result.id}`
+      if (this.type === 'ticket') return `${base}/agent/tickets/${result.id}`
+      if (this.type === 'user') return `${base}/agent/users/${result.id}`
+      return `${base}/agent/admin/${this.type}/${result.id}`
+    },
     deleteSelected () {
       console.log('Method call to deleteSelected()')
     }
   },
   created () {
-    bus.$on('results-fetched', (results) => {
+    bus.$on('results-fetched', (results, type) => {
       this.results = results
+      this.type = type
       this.complete = true
       console.log(this.results)
     })
