@@ -16,12 +16,25 @@
       </div>
     </div>
 
+    <div class="modal" :class="{'is-active': showWarningModal}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <section class="modal-card-body">
+          Are you sure you want to continue?
+        </section>
+        <footer class="modal-card-foot">
+          <a class="button is-warning" @click="deleteSelected">Continue</a>
+          <a class="button" @click="toggleWarningModal">Cancel</a>
+        </footer>
+      </div>
+    </div>
+
     <div v-if="results.length">
 
       <nav class="level">
         <div class="level-left">
           <div class="level-item">
-            <a class="button is-danger is-outlined" :disabled="deleteDisabled" @click="deleteSelected">
+            <a class="button is-danger is-outlined" :disabled="deleteDisabled" @click="toggleWarningModal">
               <span>Delete</span>
               <span class="icon is-small">
                 <i class="fa fa-times"></i>
@@ -86,7 +99,8 @@ export default {
       selected: [],
       messages: {
         success: ''
-      }
+      },
+      showWarningModal: false
     }
   },
   components: {
@@ -128,6 +142,7 @@ export default {
       return `${base}/agent/admin/${this.type}/${result.id}`
     },
     deleteSelected () {
+      this.showWarningModal = false
       console.log('Method call to deleteSelected()')
       // Delete articles
       if (this.type === 'article') {
@@ -197,6 +212,10 @@ export default {
       if (Array.isArray(result[key])) return result[key].join(', ')
       if (key === 'created_at' || key === 'updated_at') return new Date(result[key]).toLocaleString()
       return result[key]
+    },
+    toggleWarningModal () {
+      console.log('Method call to toggleWarningModal()')
+      this.showWarningModal = !this.showWarningModal
     }
   },
   created () {
