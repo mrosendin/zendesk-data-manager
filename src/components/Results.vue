@@ -46,7 +46,7 @@
                 <template v-if="column.value === 'id' && type !== 'group'">
                   <a target="blank" :href="buildUrl(result)" >{{result[column.value]}}</a>
                 </template>
-                <template v-else>{{result[column.value]}}</template>
+                <template v-else>{{format(result, column.value)}}</template>
               </td>
             </tr>
           </tbody>
@@ -116,6 +116,12 @@ export default {
     },
     deleteSelected () {
       console.log('Method call to deleteSelected()')
+    },
+    format (result, key) {
+      console.log('Method call to format()')
+      if (Array.isArray(result[key])) return result[key].join(', ')
+      if (key === 'created_at' || key === 'updated_at') return new Date(result[key]).toLocaleString()
+      return result[key]
     }
   },
   created () {
