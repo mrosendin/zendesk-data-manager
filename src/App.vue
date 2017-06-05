@@ -50,6 +50,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$route)
     bus.$on('columnToggled', (columns) => {
       this.columns = columns
     })
