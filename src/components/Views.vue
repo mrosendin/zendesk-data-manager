@@ -1,8 +1,8 @@
 <template>
-  <div id="macros">
+  <div id="views">
 
     <heading>
-      <h4 slot="header" class="title is-4">Macros</h4>
+      <h4 slot="header" class="title is-4">Views</h4>
     </heading>
 
     <div class="columns">
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <search type="macros"/>
+    <search type="views"/>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ import Search from './Search.vue'
 import bus from '../bus.js'
 
 export default {
-  name: 'macros',
+  name: 'views',
   components: { Heading, ColumnSelection, Search },
   data () {
     return {
@@ -30,9 +30,9 @@ export default {
         { name: 'Id', value: 'id', selected: true },
         { name: 'Title', value: 'title', selected: true },
         { name: 'Active', value: 'active', selected: true },
-        { name: 'Description', value: 'description', selected: true },
         { name: 'Position', value: 'position', selected: true },
-        { name: 'Actions', value: 'actions', selected: true },
+        { name: 'Execution', value: 'execution', selected: true },
+        { name: 'Conditions', value: 'conditions', selected: true },
         { name: 'Restriction', value: 'restriction', selected: true }
       ]
     }

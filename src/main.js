@@ -6,7 +6,9 @@ import Groups from './components/Groups.vue'
 import Macros from './components/Macros.vue'
 import Organizations from './components/Organizations.vue'
 import Tickets from './components/Tickets.vue'
+import Triggers from './components/Triggers.vue'
 import Users from './components/Users.vue'
+import Views from './components/Views.vue'
 
 const router = new VueRouter({
   routes: [
@@ -18,7 +20,9 @@ const router = new VueRouter({
     { path: '/macros', component: Macros },
     { path: '/organizations', component: Organizations },
     { path: '/tickets', component: Tickets },
-    { path: '/users', component: Users }
+    { path: '/triggers', component: Triggers },
+    { path: '/users', component: Users },
+    { path: '/views', component: Views },
   ]
 })
 
