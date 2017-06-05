@@ -68,6 +68,9 @@ export default {
 </script>
 
 <style>
+body {
+  margin-top: 15px;
+}
 .heading {
   text-transform: none;
 }

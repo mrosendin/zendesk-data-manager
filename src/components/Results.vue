@@ -7,6 +7,15 @@
       </heading>
     </div>
 
+    <div class="columns">
+      <div class="column">
+        <div class="notification is-success" v-if="messages.success">
+          <button class="delete" @click="messages.success = ''"></button>
+            {{messages.success}}
+        </div>
+      </div>
+    </div>
+
     <div v-if="results.length">
 
       <nav class="level">
@@ -74,7 +83,10 @@ export default {
     return {
       results: [],
       complete: false,
-      selected: []
+      selected: [],
+      messages: {
+        success: ''
+      }
     }
   },
   components: {
@@ -102,6 +114,7 @@ export default {
     '$route' () {
       console.log('Route changed. Setting complete to false.')
       this.complete = false
+      this.messages.success = ''
     }
   },
   methods: {
@@ -116,9 +129,71 @@ export default {
     },
     deleteSelected () {
       console.log('Method call to deleteSelected()')
+      // Delete articles
+      if (this.type === 'article') {
+        let deleteSelectedPromise = new Promise((resolve, reject) => {
+          let count = 0
+          this.selected.forEach((id) => {
+            console.log(id)
+            client.request({
+              url: `/api/v2/help_center/articles/${id}.json`,
+              method: 'DELETE'
+            }).then(() => {
+              count += 1
+              this.results = this.results.filter((result) => {
+                return result.id !== id
+              })
+              if (count === this.selected.length) {
+                if (count > 1) this.messages.success = `${count} articles have been archived.`
+                else this.messages.success = `${count} article has been archived.`
+                this.selected = []
+              }
+            })
+          })
+        })
+      } else if (this.type !== 'group') {
+        // Bulk deletions
+        if (this.type.substr(this.type.length-1) !== 's') this.type += 's'  // pluralize
+        let count = this.selected.length
+        this.selected.forEach((id) => {
+          client.request({
+            url: `/api/v2/${this.type}/destroy_many.json?ids=${this.selected.join(',')}`,
+            method: 'DELETE'
+          }).then(() => {
+            this.results = this.results.filter((result) => {
+              return !this.selected.includes(result.id)
+            })
+            if (count > 1) this.messages.success = `${count} ${this.type} have been deleted.`
+            else this.messages.success = `${count} ${this.type.slice(0, -1)} has been deleted.`
+            this.selected = []
+          })
+        })
+      } else {
+        // Single delete (group only)
+        let deleteSelectedPromise = new Promise((resolve, reject) => {
+          let count = 0
+          this.selected.forEach((id) => {
+            client.request({
+              url: `/api/v2/groups/${id}.json`,
+              method: 'DELETE'
+            }).then(() => {
+              count += 1
+              this.results = this.results.filter((result) => {
+                return result.id !== id
+              })
+              if (count === this.selected.length) {
+                if (count > 1) this.messages.success = `${count} groups have been deleted.`
+                else this.messages.success = `${count} group has been deleted.`
+                this.selected = []
+              }
+            })
+          })
+        })
+      }
     },
     format (result, key) {
       console.log('Method call to format()')
+      if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) return result[key]  // format array of objects
       if (Array.isArray(result[key])) return result[key].join(', ')
       if (key === 'created_at' || key === 'updated_at') return new Date(result[key]).toLocaleString()
       return result[key]
