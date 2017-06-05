@@ -12,7 +12,7 @@
           <router-link to="/triggers" class="nav-item is-tab" active-class="is-active">Triggers</router-link>
           <router-link to="/users" class="nav-item is-tab" active-class="is-active">Users</router-link>
           <router-link to="/views" class="nav-item is-tab" active-class="is-active">Views</router-link>
-          <router-link to="/import" class="nav-item is-tab" active-class="is-active"><i class="fa fa-cloud-upload"></i>&nbsp;Import</router-link>
+          <router-link to="/importer" class="nav-item is-tab" active-class="is-active"><i class="fa fa-cloud-upload"></i>&nbsp;Import</router-link>
           <router-link to="/documentation" class="nav-item is-tab" active-class="is-active"><i class="fa fa-book"></i>&nbsp;Documentation</router-link>
         </div>
       </div>
