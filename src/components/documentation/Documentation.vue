@@ -11,10 +11,31 @@
               <router-link to="/introduction" active-class="is-active">Introduction</router-link>
               <ul>
                 <li><router-link to="/introduction#features" active-class="is-active">Features</router-link></li>
-                <li><router-link to="/introduction#limitations" active-class="is-active">Limitations</router-link></li>
               </ul>
             </li>
-            <li><router-link to="/importing-data" active-class="is-active">Importing Data</router-link></li>
+            <li>
+              <router-link to="/importing-data" active-class="is-active">Importing Data</router-link>
+              <ul>
+                <li><router-link to="/importing-data#limitations" active-class="is-active">Limitations</router-link></li>
+                <li><router-link to="/importing-data#formatting" active-class="is-active">Formatting</router-link></li>
+                <li><router-link to="/importing-data#examples" active-class="is-active">Examples</router-link></li>
+              </ul>
+            </li>
+            <li>
+              <router-link to="/examples" active-class="is-active">Search Examples</router-link>
+              <ul>
+                <li><router-link to="/examples#articles" active-class="is-active">Articles</router-link></li>
+                <li><router-link to="/examples#automations" active-class="is-active">Automations</router-link></li>
+                <li><router-link to="/examples#groups" active-class="is-active">Groups</router-link></li>
+                <li><router-link to="/examples#macros" active-class="is-active">Macros</router-link></li>
+                <li><router-link to="/examples#organizations" active-class="is-active">Organizations</router-link></li>
+                <li><router-link to="/examples#tickets" active-class="is-active">Tickets</router-link></li>
+                <li><router-link to="/examples#triggers" active-class="is-active">Triggers</router-link></li>
+                <li><router-link to="/examples#users" active-class="is-active">Users</router-link></li>
+                <li><router-link to="/examples#views" active-class="is-active">Views</router-link></li>
+                <li><router-link to="/examples#views" active-class="is-active">Views</router-link></li>
+              </ul>
+            </li>
           </ul>
           <p class="menu-label">
             Help

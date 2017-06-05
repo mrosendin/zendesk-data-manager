@@ -3,8 +3,10 @@ import Articles from './components/Articles.vue'
 import Automations from './components/Automations.vue'
 import Contact from './components/documentation/Contact.vue'
 import Documentation from './components/documentation/Documentation.vue'
+import Examples from './components/documentation/Examples.vue'
 import Groups from './components/Groups.vue'
 import Importer from './components/Importer.vue'
+import ImportingData from './components/documentation/ImportingData.vue'
 import Introduction from './components/documentation/Introduction.vue'
 import Macros from './components/Macros.vue'
 import Organizations from './components/Organizations.vue'
@@ -27,7 +29,9 @@ const router = new VueRouter({
     { path: '/documentation', component: Documentation, children: [
       { path: '/', redirect: '/introduction' },
       { path: '/contact', component: Contact },
-      { path: '/introduction', component: Introduction }
+      { path: '/introduction', component: Introduction },
+      { path: '/examples', component: Examples },
+      { path: '/importing-data', component: ImportingData }
     ] },
     { path: '/groups', component: Groups },
     { path: '/importer', component: Importer },
