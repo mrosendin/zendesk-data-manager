@@ -1,0 +1,47 @@
+<template>
+  <div id="macros">
+
+    <heading>
+      <h4 slot="header" class="title is-4">Macros</h4>
+    </heading>
+
+    <div class="columns">
+      <div class="column">
+        <column-selection :columns="columns"></column-selection>
+      </div>
+    </div>
+
+    <search type="macros"/>
+  </div>
+</template>
+
+<script>
+import Heading from './Heading.vue'
+import ColumnSelection from './ColumnSelection.vue'
+import Search from './Search.vue'
+import bus from '../bus.js'
+
+export default {
+  name: 'macros',
+  components: { Heading, ColumnSelection, Search },
+  data () {
+    return {
+      columns: [
+        { name: 'Id', value: 'id', selected: true },
+        { name: 'Title', value: 'title', selected: true },
+        { name: 'Active', value: 'active', selected: true },
+        { name: 'Description', value: 'description', selected: true },
+        { name: 'Position', value: 'position', selected: true },
+        { name: 'Actions', value: 'actions', selected: true },
+        { name: 'restriction', value: 'restriction', selected: true }
+      ]
+    }
+  },
+  mounted () {
+    bus.$emit('columnToggled', this.columns)
+  },
+  updated () {
+    bus.$emit('columnToggled', this.columns)
+  }
+}
+</script>

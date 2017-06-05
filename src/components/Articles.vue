@@ -28,12 +28,11 @@ import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
-import Results from './Results.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'articles',
-  components: { Heading, DateFilter, ColumnSelection, AdvancedSearch, Results },
+  components: { Heading, DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [
@@ -51,14 +50,8 @@ export default {
         { name: 'Brand Id', value: 'brand_id', selected: true },
         { name: 'Created At', value: 'created_at', selected: true },
         { name: 'Updated At', value: 'updated_at', selected: true }
-      ],
-      menuOpen: false
+      ]
     }
-  },
-  created () {
-    bus.$on('menuToggled', (menuOpen) => {
-      this.menuOpen = menuOpen
-    })
   },
   mounted () {
     // Need to set the columns, since in other files this is normally triggered

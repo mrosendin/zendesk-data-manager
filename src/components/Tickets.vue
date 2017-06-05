@@ -162,12 +162,11 @@ import PriorityFilter from './PriorityFilter.vue'
 import TicketTypeFilter from './TicketTypeFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
-import Results from './Results.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'tickets',
-  components: { Heading, StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, ColumnSelection, AdvancedSearch, Results },
+  components: { Heading, StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [
@@ -233,5 +232,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

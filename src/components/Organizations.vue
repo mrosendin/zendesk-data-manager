@@ -64,12 +64,11 @@ import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
-import Results from './Results.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'organizations',
-  components: { Heading, DateFilter, ColumnSelection, AdvancedSearch, Results },
+  components: { Heading, DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [

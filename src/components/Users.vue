@@ -98,12 +98,11 @@ import DateFilter from './DateFilter.vue'
 import RoleFilter from './RoleFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
-import Results from './Results.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'users',
-  components: { Heading, DateFilter, RoleFilter, ColumnSelection, AdvancedSearch, Results },
+  components: { Heading, DateFilter, RoleFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [
