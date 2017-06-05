@@ -2,18 +2,10 @@
   <div id="app">
     <div class="container is-fluid">
 
+      <app-header/>
+
       <div class="columns">
-        <div class="column is-2" v-if="menuOpen">
-          <sidebar></sidebar>
-        </div>
         <div class="column">
-          <p class="field">
-            <a class="button" @click="toggleMenu">
-              <span class="icon is-small">
-                <i class="fa fa-bars"></i>
-              </span>
-            </a>
-          </p>
           <router-view></router-view>
         </div>
       </div>
@@ -31,14 +23,14 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar.vue'
+import AppHeader from './components/AppHeader.vue'
 import Results from './components/Results.vue'
 import AppFooter from './components/AppFooter.vue'
 import bus from './bus.js'
 
 export default {
   name: 'app',
-  components: { Sidebar, Results, AppFooter },
+  components: { AppHeader, Results, AppFooter },
   data () {
     return {
       columns: [],

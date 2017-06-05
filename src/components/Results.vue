@@ -1,5 +1,5 @@
 <template>
-  <div id="results" v-if="complete">
+  <div id="results" v-if="complete" class="box">
 
     <div class="has-centered-text">
       <heading>
@@ -92,6 +92,12 @@ export default {
       return this.selected.length === 0
     }
   },
+  watch: {
+    '$route' () {
+      console.log('Route changed. Setting complete to false.')
+      this.complete = false
+    }
+  },
   methods: {
     deleteSelected () {
       console.log('Method call to deleteSelected()')
@@ -118,5 +124,8 @@ table tr {
 }
 .fa-circle-o-notch {
   color: #00D1B2;
+}
+.box {
+  margin-bottom: 15px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="column-selection">
+  <div id="column-selection" class="box">
 
     <heading>
       <h4 slot="header" class="title is-4">Column Selection</h4>

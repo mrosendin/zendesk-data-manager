@@ -1,144 +1,146 @@
 <template>
   <div id="tickets">
 
-    <heading>
-      <h4 slot="header" class="title is-4">Ticket Filters</h4>
-    </heading>
+    <div class="box">
+      <heading>
+        <h4 slot="header" class="title is-4">Ticket Filters</h4>
+      </heading>
 
-    <div class="columns">
-      <div class="center-inline-filters">
-        <status-filter></status-filter>
-        <priority-filter></priority-filter>
-        <date-filter></date-filter>
-        <ticket-type-filter></ticket-type-filter>
+      <div class="columns">
+        <div class="center-inline-filters">
+          <status-filter></status-filter>
+          <priority-filter></priority-filter>
+          <date-filter></date-filter>
+          <ticket-type-filter></ticket-type-filter>
+        </div>
       </div>
-    </div>
 
-    <div class="columns">
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Group</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.group">
-          </p>
+      <div class="columns">
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Group</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.group">
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Organization</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.organization">
-          </p>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Organization</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.organization">
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Commenter</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.commenter">
-          </p>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Commenter</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.commenter">
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Subject</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.subject">
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Tags</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.tags">
-          </p>
-        </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Assignee</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.assignee">
-          </p>
-        </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Requester</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.requester">
-          </p>
-        </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Collaborator(s)</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.cc">
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Description</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.description">
-          </p>
-        </div>
-      </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Channel</label>
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select v-model="filters.via">
-                <option></option>
-                <option></option>
-                <option value="mail">E-Mail</option>
-                <option value="get_satisfaction">Get Satisfaction</option>
-                <option value="dropbox">Dropbox</option>
-                <option value="chat">Chat</option>
-                <option value="twitter_dm">Twitter DM</option>
-                <option value="twitter_fav">Twitter Fav</option>
-                <option value="twitter_like">Twitter Like</option>
-                <option value="twitter">Twitter</option>
-                <option value="voicemail">Voicemail</option>
-                <option value="phone_call_inbound">Phone Call Inbound</option>
-                <option value="phone_call_outbound">Phone Call Outbound</option>
-                <option value="phone">Phone</option>
-                <option value="sms">SMS</option>
-                <option value="api">API</option>
-                <option value="logmein">LogMeIn</option>
-                <option value="facebook_post">Facebook Post</option>
-                <option value="facebook_message">Facebook Message</option>
-                <option value="facebook">Facebook</option>
-                <option value="web">Web</option>
-              </select>
-            </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Subject</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.subject">
+            </p>
           </div>
         </div>
       </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Brand</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.brand">
-          </p>
+
+      <div class="columns">
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Tags</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.tags">
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Assignee</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.assignee">
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Requester</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.requester">
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Collaborator(s)</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.cc">
+            </p>
+          </div>
         </div>
       </div>
-      <div class="column is-3">
-        <div class="field">
-          <label class="label">Field Value</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.fieldvalue">
-          </p>
+
+      <div class="columns">
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Description</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.description">
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Channel</label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="filters.via">
+                  <option></option>
+                  <option></option>
+                  <option value="mail">E-Mail</option>
+                  <option value="get_satisfaction">Get Satisfaction</option>
+                  <option value="dropbox">Dropbox</option>
+                  <option value="chat">Chat</option>
+                  <option value="twitter_dm">Twitter DM</option>
+                  <option value="twitter_fav">Twitter Fav</option>
+                  <option value="twitter_like">Twitter Like</option>
+                  <option value="twitter">Twitter</option>
+                  <option value="voicemail">Voicemail</option>
+                  <option value="phone_call_inbound">Phone Call Inbound</option>
+                  <option value="phone_call_outbound">Phone Call Outbound</option>
+                  <option value="phone">Phone</option>
+                  <option value="sms">SMS</option>
+                  <option value="api">API</option>
+                  <option value="logmein">LogMeIn</option>
+                  <option value="facebook_post">Facebook Post</option>
+                  <option value="facebook_message">Facebook Message</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="web">Web</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Brand</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.brand">
+            </p>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Field Value</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.fieldvalue">
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -150,7 +152,6 @@
     </div>
 
     <advanced-search type="ticket" :filters="filters"></advanced-search>
-  </div>
 </template>
 
 <script>

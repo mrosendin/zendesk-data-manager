@@ -1,13 +1,15 @@
 <template>
   <div id="articles">
 
-    <heading>
-      <h4 slot="header" class="title is-4">Article Filters</h4>
-    </heading>
+    <div class="box">
+      <heading>
+        <h4 slot="header" class="title is-4">Article Filters</h4>
+      </heading>
 
-    <div class="columns">
-      <div class="center-inline-filters">
-        <date-filter></date-filter>
+      <div class="columns">
+        <div class="center-inline-filters">
+          <date-filter></date-filter>
+        </div>
       </div>
     </div>
 

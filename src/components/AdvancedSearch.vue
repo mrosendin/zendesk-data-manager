@@ -5,10 +5,10 @@
       <div class="column">
         <div class="field has-addons flex-center">
           <p class="control">
-            <input v-model="keywords" class="input" type="text" placeholder="Enter keywords">
+            <input v-model="keywords" class="input is-medium" type="text" placeholder="Enter keywords">
           </p>
           <p class="control">
-            <a class="button is-info" @click="search">
+            <a class="button is-info is-medium" @click="search">
               Search
             </a>
           </p>
@@ -62,7 +62,7 @@ export default {
       if (this.ticketType) result.push(`${this.ticketType}`)
       if (this.role) result.push(`${this.role}`)
       for (var key in this.filters) {
-        if (this.filters[key]) result.push(`${key}:'${this.filters[key]}'`);
+        if (this.filters[key]) result.push(`${key}:"${this.filters[key]}"`);
       }
       result = `${result.join(' ')}`
       return result
