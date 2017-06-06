@@ -1,50 +1,52 @@
 <template>
   <div id="organizations">
 
-    <heading>
-      <h4 slot="header" class="title is-4">Organization Filters</h4>
-    </heading>
+    <div class="box">
+      <heading>
+        <h4 slot="header" class="title is-4">Organization Filters</h4>
+      </heading>
 
-    <div class="columns">
-      <div class="center-inline-filters">
-        <date-filter></date-filter>
-      </div>
-    </div>
-
-    <div class="columns">
-      <div class="column is-4 is-offset-2">
-        <div class="field">
-          <label class="label">Name</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.name">
-          </p>
+      <div class="columns">
+        <div class="center-inline-filters">
+          <date-filter></date-filter>
         </div>
       </div>
-      <div class="column is-4">
-        <div class="field">
-          <label class="label">Tags</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.tags">
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <div class="columns">
-      <div class="column is-4 is-offset-2">
-        <div class="field">
-          <label class="label">Notes</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.notes">
-          </p>
+      <div class="columns">
+        <div class="column is-4 is-offset-2">
+          <div class="field">
+            <label class="label">Name</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.name">
+            </p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="field">
+            <label class="label">Tags</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.tags">
+            </p>
+          </div>
         </div>
       </div>
-      <div class="column is-4">
-        <div class="field">
-          <label class="label">Details</label>
-          <p class="control">
-            <input class="input" type="text" v-model="filters.details">
-          </p>
+
+      <div class="columns">
+        <div class="column is-4 is-offset-2">
+          <div class="field">
+            <label class="label">Notes</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.notes">
+            </p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="field">
+            <label class="label">Details</label>
+            <p class="control">
+              <input class="input" type="text" v-model="filters.details">
+            </p>
+          </div>
         </div>
       </div>
     </div>
