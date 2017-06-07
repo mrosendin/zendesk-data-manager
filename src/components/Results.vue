@@ -72,10 +72,10 @@
             <tr v-for="result in results">
               <td><input type="checkbox" v-model="selected" :value="result.id" number></td>
               <td v-for="column in columns" v-if="column.selected">
-                <template v-if="column.value === 'id' && type !== 'group'">
-                  <a target="blank" :href="buildUrl(result)" >{{result[column.value]}}</a>
+                <template v-if="column.value === 'id' && type !== 'groups' && type !== 'group'">
+                  <a target="blank" :href="result.url" >{{result[column.value]}}</a>
                 </template>
-                <template v-else>{{format(result, column.value)}}</template>
+                <template v-else>{{result[column.value]}}</template>
               </td>
             </tr>
           </tbody>
@@ -154,7 +154,6 @@ export default {
   },
   methods: {
     buildUrl (result) {
-      console.log('Method call to buildUrl()')
       let base = `https://${config.currentAccount.subdomain}.zendesk.com`
       if (this.type === 'article') return `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
       if (this.type === 'organization') return `${base}/agent/organizations/${result.id}`
@@ -225,12 +224,16 @@ export default {
         })
       }
     },
-    format (result, key) {
-      console.log('Method call to format()')
-      if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) return result[key]  // format array of objects
-      if (Array.isArray(result[key])) return result[key].join(', ')
-      if (key === 'created_at' || key === 'updated_at') return new Date(result[key]).toLocaleString()
-      return result[key]
+    format (results) {
+      results.forEach((result, index) => {
+        for (let key in result) {
+          if (key === 'id') result.url = this.buildUrl(result)
+          if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
+          if (Array.isArray(result[key])) result[key] = result[key].join(', ')
+          if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
+        }
+      })
+      return results
     },
     onChange (page) {
       let url = this.url + (this.isSearch ? `&page=${page}` : `?page=${page}`)
@@ -251,14 +254,14 @@ export default {
   },
   created () {
     bus.$on('results-fetched', (results, type, url = '', itemsPerPage = 30, total = null, search = false) => {
-      this.results = results
-      this.isSearch = search
       this.type = type
+      this.results = this.format(results)
+      this.isSearch = search
       this.url = url
       this.complete = true
+      this.pagination.current = 1
       this.pagination.itemsPerPage = itemsPerPage
       this.pagination.total = total
-      console.log(this.pagination)
     })
   }
 }
