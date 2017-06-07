@@ -3,7 +3,7 @@
 
     <div class="has-centered-text">
       <heading>
-        <h4 slot="header" class="title is-4">{{count}} Result(s)</h4>
+        <h4 slot="header" class="title is-4">{{this.pagination.total}} Result(s)</h4>
       </heading>
     </div>
 
@@ -53,6 +53,13 @@
         </div>
       </nav>
 
+      <pagination
+        :current="pagination.current"
+        :total="pagination.total"
+        :itemsPerPage="pagination.itemsPerPage"
+        :onChange="onChange">
+      </pagination>
+
       <div id="table-scroll">
         <table class="table is-bordered">
           <thead>
@@ -75,14 +82,28 @@
         </table>
       </div>
 
+      <pagination
+        :current="pagination.current"
+        :total="pagination.total"
+        :itemsPerPage="pagination.itemsPerPage"
+        :onChange="onChange">
+      </pagination>
+
     </div>
   </div>
 </template>
 
 <script>
 import Heading from './Heading.vue'
+import Pagination from 'vue-2-bulma-pagination'
 import bus from '../bus.js'
 import config from '../config.js'
+
+let pagination = {
+  current: 1,
+  total: 0,
+  itemsPerPage: 100
+}
 
 export default {
   name: 'results',
@@ -100,12 +121,12 @@ export default {
       messages: {
         success: ''
       },
-      showWarningModal: false
+      showWarningModal: false,
+      pagination: pagination,
+      url: ''
     }
   },
-  components: {
-    Heading
-  },
+  components: { Heading, Pagination },
   computed: {
     count () {
       return this.results.length
@@ -126,7 +147,6 @@ export default {
   },
   watch: {
     '$route' () {
-      console.log('Route changed. Setting complete to false.')
       this.complete = false
       this.messages.success = ''
     }
@@ -143,13 +163,11 @@ export default {
     },
     deleteSelected () {
       this.showWarningModal = false
-      console.log('Method call to deleteSelected()')
       // Delete articles
       if (this.type === 'article') {
         let deleteSelectedPromise = new Promise((resolve, reject) => {
           let count = 0
           this.selected.forEach((id) => {
-            console.log(id)
             client.request({
               url: `/api/v2/help_center/articles/${id}.json`,
               method: 'DELETE'
@@ -213,17 +231,31 @@ export default {
       if (key === 'created_at' || key === 'updated_at') return new Date(result[key]).toLocaleString()
       return result[key]
     },
+    onChange (page) {
+      client.request({
+        type: 'GET',
+        url: `${this.url}&page=${page}`
+      }).then(data => {
+        if (data.hasOwnProperty(this.type)) this.results = data[this.type]
+        else this.results = data.results
+        this.pagination.current = page
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     toggleWarningModal () {
-      console.log('Method call to toggleWarningModal()')
       this.showWarningModal = !this.showWarningModal
     }
   },
   created () {
-    bus.$on('results-fetched', (results, type) => {
+    bus.$on('results-fetched', (results, type, url, itemsPerPage = 30, total = null) => {
       this.results = results
       this.type = type
+      this.url = url
       this.complete = true
-      console.log(this.results)
+      this.pagination.itemsPerPage = itemsPerPage
+      this.pagination.total = total
+      console.log(this.pagination)
     })
   }
 }
@@ -242,6 +274,9 @@ table tr {
   color: #00D1B2;
 }
 .box {
+  margin-bottom: 15px;
+}
+#pagination {
   margin-bottom: 15px;
 }
 </style>

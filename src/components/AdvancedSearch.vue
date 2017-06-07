@@ -99,9 +99,12 @@ export default {
     search () {
       console.log(`Searching for ${this.type}`)
 
-      client.request(`/api/v2/search.json?query=${encodeURIComponent(this.query)}`)
+      let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`
+      client.request(url)
         .then((data) => {
-          bus.$emit('results-fetched', data.results, this.type)
+          console.log(data)
+          let itemsPerPage = 100
+          bus.$emit('results-fetched', data.results, this.type, url, itemsPerPage, data.count)
         }).catch((error) => {
           this.error = error.responseJSON.description
         })

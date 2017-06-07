@@ -42,9 +42,12 @@ export default {
       if (!this.title) return
       console.log(`Searching for ${this.type}`)
 
-      client.request(`/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`)
+      let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`
+      client.request(url)
         .then((data) => {
-          bus.$emit('results-fetched', data[this.type], this.type)
+          console.log(data)
+          let itemsPerPage = 30
+          bus.$emit('results-fetched', data[this.type], this.type, url, itemsPerPage, data.count)
         }).catch((error) => {
           this.error = error.responseJSON.description
         })

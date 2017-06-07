@@ -152,6 +152,7 @@
     </div>
 
     <advanced-search type="ticket" :filters="filters"></advanced-search>
+  </div>
 </template>
 
 <script>

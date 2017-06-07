@@ -47,6 +47,7 @@
       </div>
       <div class="column is-10">
         <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
