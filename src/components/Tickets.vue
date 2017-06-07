@@ -213,6 +213,14 @@ export default {
       }
     }
   },
+  mounted () {
+    let url = '/api/v2/tickets.json'
+    client.request(url).then(data => {
+      bus.$emit('results-fetched', data.tickets, 'tickets', url, 100, data.count, false)
+    }).catch(error => {
+      console.log(error)
+    })
+  },
   updated () {
     bus.$emit('columnToggled', this.columns.concat(this.customFields))
   },

@@ -104,7 +104,7 @@ export default {
         .then((data) => {
           console.log(data)
           let itemsPerPage = 100
-          bus.$emit('results-fetched', data.results, this.type, url, itemsPerPage, data.count)
+          bus.$emit('results-fetched', data.results, this.type, url, itemsPerPage, data.count, true)
         }).catch((error) => {
           this.error = error.responseJSON.description
         })

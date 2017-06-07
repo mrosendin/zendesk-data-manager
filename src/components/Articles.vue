@@ -50,6 +50,12 @@ export default {
     // Need to set the columns, since in other files this is normally triggered
     // when getting custom fields
     bus.$emit('columnToggled', this.columns)
+    let url = '/api/v2/help_center/articles.json'
+    client.request(url).then(data => {
+      bus.$emit('results-fetched', data.articles, 'articles', url, data.per_page, data.count, false)
+    }).catch(error => {
+      console.log(error)
+    })
   },
   updated () {
     bus.$emit('columnToggled', this.columns)

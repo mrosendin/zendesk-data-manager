@@ -39,7 +39,16 @@ export default {
   },
   methods: {
     search: _.debounce(function () {
-      if (!this.title) return
+      if (!this.title) {
+        return new Promise((resolve, reject) => {
+          let url = `/api/v2/${this.type}.json`
+          client.request(url).then(data => {
+            bus.$emit('results-fetched', data[this.type], this.type, url, 30, data.count, true)
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+      }
       console.log(`Searching for ${this.type}`)
 
       let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`

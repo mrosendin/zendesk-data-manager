@@ -123,7 +123,8 @@ export default {
       },
       showWarningModal: false,
       pagination: pagination,
-      url: ''
+      url: '',
+      isSearch: false
     }
   },
   components: { Heading, Pagination },
@@ -232,9 +233,10 @@ export default {
       return result[key]
     },
     onChange (page) {
+      let url = this.url + (this.isSearch ? `&page=${page}` : `?page=${page}`)
       client.request({
         type: 'GET',
-        url: `${this.url}&page=${page}`
+        url: url
       }).then(data => {
         if (data.hasOwnProperty(this.type)) this.results = data[this.type]
         else this.results = data.results
@@ -248,8 +250,9 @@ export default {
     }
   },
   created () {
-    bus.$on('results-fetched', (results, type, url, itemsPerPage = 30, total = null) => {
+    bus.$on('results-fetched', (results, type, url = '', itemsPerPage = 30, total = null, search = false) => {
       this.results = results
+      this.isSearch = search
       this.type = type
       this.url = url
       this.complete = true
@@ -266,6 +269,7 @@ export default {
   overflow: auto;
   white-space: pre;
   width: 100%;
+  margin-bottom: 15px;
 }
 table tr {
   white-space: nowrap;

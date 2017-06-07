@@ -93,6 +93,14 @@ export default {
       }
     }
   },
+  mounted () {
+    let url = '/api/v2/organizations.json'
+    client.request(url).then(data => {
+      bus.$emit('results-fetched', data.organizations, 'organizations', url, 100, data.count, false)
+    }).catch(error => {
+      console.log(error)
+    })
+  },
   updated () {
     bus.$emit('columnToggled', this.columns.concat(this.customFields))
   },

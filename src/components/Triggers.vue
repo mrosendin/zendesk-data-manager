@@ -41,6 +41,12 @@ export default {
   },
   mounted () {
     bus.$emit('columnToggled', this.columns)
+    let url = '/api/v2/triggers.json'
+    client.request(url).then(data => {
+      bus.$emit('results-fetched', data.triggers, 'triggers', url, 30, data.count, false)
+    }).catch(error => {
+      console.log(error)
+    })
   },
   updated () {
     bus.$emit('columnToggled', this.columns)

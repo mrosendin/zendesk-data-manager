@@ -61,6 +61,12 @@ export default {
     // Need to set the columns, since in other files this is normally triggered
     // when getting custom fields
     bus.$emit('columnToggled', this.columns)
+    let url = '/api/v2/groups.json'
+    client.request(url).then(data => {
+      bus.$emit('results-fetched', data.groups, 'groups', url, 100, data.count, false)
+    }).catch(error => {
+      console.log(error)
+    })
   },
   updated () {
     bus.$emit('columnToggled', this.columns)
