@@ -46,7 +46,7 @@ export default {
   },
   watch: {
     '$route' () {
-      console.log('Route changed. Clearing columns.')
+      console.log(`Route changed to ${this.$route.path}. Clearing columns.`)
       this.columns = []
     }
   },
@@ -59,7 +59,6 @@ export default {
       })
     })
 
-    console.log(this.$route)
     bus.$on('columnToggled', (columns) => {
       this.columns = columns
     })

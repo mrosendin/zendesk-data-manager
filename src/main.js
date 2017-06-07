@@ -27,11 +27,11 @@ const router = new VueRouter({
     { path: '/articles', component: Articles },
     { path: '/automations', component: Automations },
     { path: '/documentation', component: Documentation, children: [
-      { path: '/', redirect: '/introduction' },
-      { path: '/contact', component: Contact },
-      { path: '/introduction', component: Introduction },
-      { path: '/examples', component: Examples },
-      { path: '/importing-data', component: ImportingData }
+      { path: '/documentation', redirect: '/documentation/introduction' },
+      { path: '/documentation/contact', component: Contact },
+      { path: '/documentation/introduction', component: Introduction },
+      { path: '/documentation/examples', component: Examples },
+      { path: '/documentation/importing-data', component: ImportingData }
     ] },
     { path: '/groups', component: Groups },
     { path: '/importer', component: Importer },
