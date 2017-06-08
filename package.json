@@ -2,7 +2,7 @@
   "name": "data-manager",
   "description": "A Zendesk application for managing data",
   "version": "1.0.0",
-  "author": "Matt Rosendin <matt.rosendin@gmail.com>",
+  "author": "Matthew Rosendin <matt@roseware.com>",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",

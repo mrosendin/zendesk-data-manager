@@ -6,7 +6,7 @@
     "url": "https://roseware.io"
   },
   "defaultLocale": "en",
-  "private": true,
+  "private": false,
   "location": {
     "support": {
       "nav_bar": "assets/index.html"

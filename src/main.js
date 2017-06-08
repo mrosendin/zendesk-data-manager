@@ -22,7 +22,7 @@ const router = new VueRouter({
     else return { x: 0, y: 0 }
   },
   routes: [
-    { path: '/index.html', redirect: '/articles' },
+    { path: '*', redirect: '/articles' },
     { path: '/', redirect: '/articles' },
     { path: '/articles', component: Articles },
     { path: '/automations', component: Automations },
