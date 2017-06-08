@@ -2,6 +2,8 @@
 
 > A Zendesk app for managing account data
 
+![](./demo.png)
+
 ## Build Setup
 
 ``` bash
