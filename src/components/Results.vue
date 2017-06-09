@@ -16,6 +16,15 @@
       </div>
     </div>
 
+    <div class="columns">
+      <div class="column">
+        <div class="notification is-danger" v-if="messages.error">
+          <button class="delete" @click="messages.error = ''"></button>
+            {{messages.error}}
+        </div>
+      </div>
+    </div>
+
     <div class="modal" :class="{'is-active': showWarningModal}">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -120,7 +129,8 @@ export default {
       complete: false,
       selected: [],
       messages: {
-        success: ''
+        success: '',
+        error: ''
       },
       showWarningModal: false,
       pagination: pagination,
@@ -151,6 +161,7 @@ export default {
     '$route' () {
       this.complete = false
       this.messages.success = ''
+      this.messages.error = ''
     }
   },
   methods: {
@@ -257,7 +268,7 @@ export default {
             console.log("Resolving promise in processResults.")
             resolve(results)
           }).catch(error => {
-            console.log(error)
+            this.messages.error = error
             reject()
           })
         } else {
@@ -275,7 +286,7 @@ export default {
         else this.results = data.results
         this.pagination.current = page
       }).catch(error => {
-        console.log(error)
+        this.messages.error = error
       })
     },
     toggleWarningModal () {
