@@ -2,17 +2,65 @@
   <div id="advanced-search" class="has-text-centered">
 
     <div class="columns">
-      <div class="column">
-        <div class="field has-addons flex-center">
-          <p class="control">
-            <input v-model="keywords" class="input is-medium" type="text" placeholder="Enter keywords">
-          </p>
-          <p class="control">
-            <a class="button is-info is-medium" @click="search">
-              Search
-            </a>
-          </p>
+      <div class="center-inline-filters">
+
+        <div id="sortBy">
+          <div class="field-label">
+            <label class="label">Sort by</label>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field is-narrow">
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select v-model="sortBy">
+                      <option value="relevance">Relevance</option>
+                      <option value="created_at">Created At</option>
+                      <option value="updated_at">Updated At</option>
+                      <option value="priority" v-if="type === 'ticket'">Priority</option>
+                      <option value="status" v-if="type === 'ticket'">Status</option>
+                      <option value="ticket_type" v-if="type === 'ticket'">Ticket Type</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div id="order">
+          <div class="field-label">
+            <label class="label">Order</label>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field is-narrow">
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select v-model="order">
+                      <option value="asc">Ascending</option>
+                      <option value="desc">Descending</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="search">
+          <div class="field has-addons is-horizontal">
+            <p class="control">
+              <input v-model="keywords" class="input" type="text" placeholder="Enter keywords">
+            </p>
+            <p class="control">
+              <a class="button is-primary" @click="search">
+                Search
+              </a>
+            </p>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -49,7 +97,9 @@ export default {
       status: '',
       priority: '',
       ticketType: '',
-      role: ''
+      role: '',
+      sortBy: '',
+      order: ''
     }
   },
   computed: {
@@ -100,6 +150,8 @@ export default {
       console.log(`Searching for ${this.type}`)
 
       let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`
+      if (this.sortBy) url += `&sort_by=${this.sortBy}`
+      if (this.order) url += `&sort_order=${this.order}`
       client.request(url)
         .then((data) => {
           console.log(data)
@@ -123,7 +175,10 @@ export default {
 </script>
 
 <style scoped>
-.flex-center {
-  justify-content: center
+#sortBy, #order, #search {
+  border: none !important;
+}
+.field-label {
+  text-align: left;
 }
 </style>

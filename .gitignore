@@ -4,3 +4,5 @@ dist/
 npm-debug.log
 yarn-error.log
 tmp
+app/assets/build.js
+app/assets/build.js.map
