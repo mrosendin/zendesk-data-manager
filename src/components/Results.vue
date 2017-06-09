@@ -98,6 +98,7 @@ import Heading from './Heading.vue'
 import Pagination from 'vue-2-bulma-pagination'
 import bus from '../bus.js'
 import config from '../config.js'
+import Sideload from '../sideload.js'
 
 let pagination = {
   current: 1,
@@ -155,10 +156,10 @@ export default {
   methods: {
     buildUrl (result) {
       let base = `https://${config.currentAccount.subdomain}.zendesk.com`
-      if (this.type === 'article') return `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
-      if (this.type === 'organization') return `${base}/agent/organizations/${result.id}`
-      if (this.type === 'ticket') return `${base}/agent/tickets/${result.id}`
-      if (this.type === 'user') return `${base}/agent/users/${result.id}`
+      if (this.type === 'articles') return `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
+      if (this.type === 'organizations') return `${base}/agent/organizations/${result.id}`
+      if (this.type === 'tickets') return `${base}/agent/tickets/${result.id}`
+      if (this.type === 'users') return `${base}/agent/users/${result.id}`
       return `${base}/agent/admin/${this.type}/${result.id}`
     },
     deleteSelected () {
@@ -225,20 +226,44 @@ export default {
       }
     },
     format (results) {
-      results.forEach((result, index) => {
-        for (let key in result) {
-          if (key === 'id') result.url = this.buildUrl(result)
-          if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
-          if (key === 'custom_fields') {
-            result[key].map(customField => {
-              result[`custom_field_${customField.id}`] = customField.value
-            })
+      console.log(`Displaying ${results.length} results.`)
+      return new Promise((resolve, reject) => {
+        // Basic formatting
+        results.forEach((result, index) => {
+          for (let key in result) {
+            if (key === 'id') result.url = this.buildUrl(result)
+            if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
+            if (key === 'custom_fields') {
+              result[key].map(customField => {
+                result[`custom_field_${customField.id}`] = customField.value
+              })
+            }
+            if (Array.isArray(result[key])) result[key] = result[key].join(', ')
+            if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
           }
-          if (Array.isArray(result[key])) result[key] = result[key].join(', ')
-          if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
+        })
+
+        // Sideloading, if enabled
+        if (config.settings.sideloads && results.length) {
+          console.log("Sideloading enabled.")
+          let sideloadableColumns = []
+          for (let column of this.columns) {
+            if (column.selected && column.hasOwnProperty('sideload')) {
+              sideloadableColumns.push(column)
+            }
+          }
+          console.log("Starting Sideload.replaceIdsWithNames.")
+          Sideload.replaceIdsWithNames(results, sideloadableColumns).then(results => {
+            console.log("Resolving promise in processResults.")
+            resolve(results)
+          }).catch(error => {
+            console.log(error)
+            reject()
+          })
+        } else {
+          resolve(results)
         }
       })
-      return results
     },
     onChange (page) {
       let url = this.url + (this.isSearch ? `&page=${page}` : `?page=${page}`)
@@ -260,13 +285,15 @@ export default {
   created () {
     bus.$on('results-fetched', (results, type, url = '', itemsPerPage = 30, total = null, search = false) => {
       this.type = type
-      this.results = this.format(results)
-      this.isSearch = search
-      this.url = url
-      this.complete = true
-      this.pagination.current = 1
-      this.pagination.itemsPerPage = itemsPerPage
-      this.pagination.total = total
+      this.format(results).then(results => {
+        this.results = results
+        this.isSearch = search
+        this.url = url
+        this.complete = true
+        this.pagination.current = 1
+        this.pagination.itemsPerPage = itemsPerPage
+        this.pagination.total = total
+      })
     })
   }
 }
