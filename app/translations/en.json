@@ -1,6 +1,12 @@
 {
   "app": {
     "description": "Manage your data with advanced search, export, import, and removal.",
-    "name": "Data Manager"
+    "name": "Data Manager",
+    "parameters": {
+      "sideloads": {
+        "label": "Enable User and Organization ID Replacement",
+        "helpText": "Names will replace IDs in the filtered results. You may want to disable this option if you are hitting the API rate limit or if you plan to import a CSV of the search results."
+      }
+    }
   }
 }
