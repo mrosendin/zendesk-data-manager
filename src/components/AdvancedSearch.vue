@@ -48,16 +48,32 @@
           </div>
         </div>
 
+        <div id="keywords">
+          <div class="field-label">
+            <label class="label">Keywords</label>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field is-narrow">
+                <p class="control">
+                  <input v-model="keywords" class="input" type="text" placeholder="Enter keywords">
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div id="search">
-          <div class="field has-addons is-horizontal">
-            <p class="control">
-              <input v-model="keywords" class="input" type="text" placeholder="Enter keywords">
-            </p>
-            <p class="control">
-              <a class="button is-primary" @click="search">
-                Search
-              </a>
-            </p>
+          <div class="field is-horizontal">
+            <div class="field-body">
+              <div class="field is-narrow">
+                <p class="control">
+                  <a class="button is-primary" @click="search">
+                    Search
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -175,7 +191,7 @@ export default {
 </script>
 
 <style scoped>
-#sortBy, #order, #search {
+#sortBy, #order, #keywords, #search {
   border: none !important;
 }
 .field-label {
