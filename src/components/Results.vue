@@ -229,6 +229,11 @@ export default {
         for (let key in result) {
           if (key === 'id') result.url = this.buildUrl(result)
           if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
+          if (key === 'custom_fields') {
+            result[key].map(customField => {
+              result[`custom_field_${customField.id}`] = customField.value
+            })
+          }
           if (Array.isArray(result[key])) result[key] = result[key].join(', ')
           if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
         }

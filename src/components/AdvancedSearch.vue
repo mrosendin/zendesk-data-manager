@@ -1,5 +1,5 @@
 <template>
-  <div id="advanced-search">
+  <div id="advanced-search" class="has-text-centered">
 
     <div class="columns">
       <div class="center-inline-filters">
@@ -170,7 +170,6 @@ export default {
       if (this.order) url += `&sort_order=${this.order}`
       client.request(url)
         .then((data) => {
-          console.log(data)
           let itemsPerPage = 100
           bus.$emit('results-fetched', data.results, this.type, url, itemsPerPage, data.count, true)
         }).catch((error) => {
