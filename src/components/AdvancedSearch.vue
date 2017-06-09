@@ -1,5 +1,5 @@
 <template>
-  <div id="advanced-search" class="has-text-centered">
+  <div id="advanced-search">
 
     <div class="columns">
       <div class="center-inline-filters">
