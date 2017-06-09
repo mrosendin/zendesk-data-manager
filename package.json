@@ -24,7 +24,9 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "vue-2-bulma-pagination": "^0.0.6",
+    "vue-bulma-typeahead": "0.0.4",
     "vue2-dropzone": "^2.2.7"
   }
 }

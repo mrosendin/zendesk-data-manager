@@ -28,7 +28,11 @@
           <div class="field">
             <label class="label">Organization</label>
             <p class="control">
-              <input class="input" type="text" v-model="filters.organization">
+              <p class="control has-icons-left">
+               <typeahead :source="organizations" :onSelect="onSelect" :onChange="onChange" :limit="5" name="organization"></typeahead>
+               <span class="icon is-small is-left">
+                 <i class="fa fa-magic"></i>
+               </span>
             </p>
           </div>
         </div>
@@ -36,7 +40,11 @@
           <div class="field">
             <label class="label">Commenter</label>
             <p class="control">
-              <input class="input" type="text" v-model="filters.commenter">
+              <p class="control has-icons-left">
+               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="commenter"></typeahead>
+               <span class="icon is-small is-left">
+                 <i class="fa fa-magic"></i>
+               </span>
             </p>
           </div>
         </div>
@@ -54,8 +62,11 @@
         <div class="column is-3">
           <div class="field">
             <label class="label">Tags</label>
-            <p class="control">
-              <input class="input" type="text" v-model="filters.tags">
+            <p class="control has-icons-left">
+             <typeahead :source="tags" :onSelect="onSelect" :onChange="onChange" :limit="5" name="tags"></typeahead>
+             <span class="icon is-small is-left">
+               <i class="fa fa-magic"></i>
+             </span>
             </p>
           </div>
         </div>
@@ -63,7 +74,11 @@
           <div class="field">
             <label class="label">Assignee</label>
             <p class="control">
-              <input class="input" type="text" v-model="filters.assignee">
+              <p class="control has-icons-left">
+               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="assignee"></typeahead>
+               <span class="icon is-small is-left">
+                 <i class="fa fa-magic"></i>
+               </span>
             </p>
           </div>
         </div>
@@ -71,7 +86,11 @@
           <div class="field">
             <label class="label">Requester</label>
             <p class="control">
-              <input class="input" type="text" v-model="filters.requester">
+              <p class="control has-icons-left">
+               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="requester"></typeahead>
+               <span class="icon is-small is-left">
+                 <i class="fa fa-magic"></i>
+               </span>
             </p>
           </div>
         </div>
@@ -161,13 +180,14 @@ import DateFilter from './DateFilter.vue'
 import StatusFilter from './StatusFilter.vue'
 import PriorityFilter from './PriorityFilter.vue'
 import TicketTypeFilter from './TicketTypeFilter.vue'
+import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'tickets',
-  components: { Heading, StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, ColumnSelection, AdvancedSearch },
+  components: { Heading, StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [
@@ -210,7 +230,35 @@ export default {
         via: '',
         brand: '',
         fieldvalue: ''
+      },
+      organizations: [],
+      users: [],
+      tags: []
+    }
+  },
+  methods: {
+    onChange (value, name) {
+      this.filters[name] = value
+
+      let url;
+      let resource;
+
+      if (name === 'tags') {
+        resource = 'tags'
+        url = `/api/v2/autocomplete/tags.json?name=${value}`
+      } else {
+        resource = (name === 'organization' ? 'organizations' : 'users')
+        url = `/api/v2/${resource}/autocomplete.json?name=${value}`
       }
+
+      client.request(url).then(response => {
+        this[resource] = (response.hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    onSelect (value, name) {
+      this.filters[name] = value
     }
   },
   mounted () {

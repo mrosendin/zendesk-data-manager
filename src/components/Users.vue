@@ -17,8 +17,11 @@
         <div class="column is-3">
           <div class="field">
             <label class="label">Name</label>
-            <p class="control">
-              <input class="input" type="text" v-model="filters.name">
+            <p class="control has-icons-left">
+             <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="name"></typeahead>
+             <span class="icon is-small is-left">
+               <i class="fa fa-magic"></i>
+             </span>
             </p>
           </div>
         </div>
@@ -33,9 +36,12 @@
         <div class="column is-3">
           <div class="field">
             <label class="label">Organization</label>
-            <p class="control">
-              <input class="input" type="text" v-model="filters.organization">
-            </p>
+            <p class="control has-icons-left">
+             <typeahead :source="organizations" :onSelect="onSelect" :onChange="onChange" :limit="5" name="organization"></typeahead>
+             <span class="icon is-small is-left">
+               <i class="fa fa-magic"></i>
+             </span>
+            <p>
           </div>
         </div>
         <div class="column is-3">
@@ -76,8 +82,11 @@
         <div class="column is-3">
           <div class="field">
             <label class="label">Tags</label>
-            <p class="control">
-              <input class="input" type="text" v-model="filters.tags">
+            <p class="control has-icons-left">
+             <typeahead :source="tags" :onSelect="onSelect" :onChange="onChange" :limit="5" name="tags"></typeahead>
+             <span class="icon is-small is-left">
+               <i class="fa fa-magic"></i>
+             </span>
             </p>
           </div>
         </div>
@@ -98,13 +107,14 @@
 import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import RoleFilter from './RoleFilter.vue'
+import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'users',
-  components: { Heading, DateFilter, RoleFilter, ColumnSelection, AdvancedSearch },
+  components: { Heading, DateFilter, RoleFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [
@@ -136,7 +146,35 @@ export default {
         external_id: '',
         phone: '',
         tags: ''
+      },
+      organizations: [],
+      users: [],
+      tags: []
+    }
+  },
+  methods: {
+    onChange (value, name) {
+      this.filters[name] = value
+
+      let url;
+      let resource;
+
+      if (name === 'tags') {
+        resource = 'tags'
+        url = `/api/v2/autocomplete/tags.json?name=${value}`
+      } else {
+        resource = (name === 'organization' ? 'organizations' : 'users')
+        url = `/api/v2/${resource}/autocomplete.json?name=${value}`
       }
+
+      client.request(url).then(response => {
+        this[resource] = (response.hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    onSelect (value, name) {
+      this.filters[name] = value
     }
   },
   mounted () {
