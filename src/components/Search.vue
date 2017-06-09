@@ -81,6 +81,16 @@
 
       </div>
     </div>
+
+    <div class="columns">
+      <div class="column">
+        <div class="notification is-danger" v-if="error">
+          <button class="delete" @click="error = ''"></button>
+            {{error}}
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -115,7 +125,7 @@ export default {
           client.request(url).then(data => {
             bus.$emit('results-fetched', data[this.type], this.type, url, 30, data.count, true)
           }).catch(error => {
-            console.log(error)
+            this.error = error.responseJSON.description
           })
         })
       }
@@ -126,7 +136,6 @@ export default {
       if (this.order) url += `&sort_order=${this.order}`
       client.request(url)
         .then((data) => {
-          console.log(data)
           let itemsPerPage = 30
           bus.$emit('results-fetched', data[this.type], this.type, url, itemsPerPage, data.count)
         }).catch((error) => {
