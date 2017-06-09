@@ -2,9 +2,22 @@
 
 > A Zendesk app for managing account data
 
+| [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/edge.png" alt="IE / Edge" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/firefox.png" alt="Firefox" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/chrome.png" alt="Chrome" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/godban/browsers-support-badges/master/src/images/safari.png" alt="Safari" width="16px" height="16px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
+| --------- | -------------- | -------------- | --------------- |
+| IE11, Edge| last 2 versions| last 2 versions| last 2 versions |
+
 ![](./demo.png)
 
-## Build Setup
+## Table of Contents
+- [Development](#development)
+- [Analytics](#data-analytics)
+- [Billing](#billing)
+
+## Development
+
+Data Exporter is a Vue.js 2 app built on the Zendesk Apps Framework v2.0.
+
+### Build Setup
 
 ``` bash
 # Install dependencies
@@ -16,3 +29,15 @@ npm run build
 # Run ZAT server, navigate to https://roseware.zendesk.com/agent/apps/data-manager?zat=true
 cd app && zat server
 ```
+
+## Analytics
+
+Log into [Mixpanel](https://mixpanel.com) to view data analytics.
+
+## Payments
+
+Log into [Stripe](https://dashboard.stripe.com/dashboard) to manage payments.
+
+---
+
+&copy; Roseware LLC 2017. All rights reserved.
