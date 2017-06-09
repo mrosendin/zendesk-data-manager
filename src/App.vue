@@ -58,6 +58,28 @@ export default {
         config.currentUser = data['currentUser']
         client.metadata().then(metadata => {
           config.settings = metadata.settings
+          let token = localStorage.getItem('DataManagerToken')
+          if (token) {
+            console.log('Token is stored.')
+            config.token = JSON.parse(token).full_token
+          } else {
+            let data = {
+              token: {
+                client_id: "63627",
+                scopes: ["read", "write"]
+              }
+            }
+            client.request({
+              method: 'POST',
+              url: `/api/v2/oauth/tokens.json`,
+              contentType: 'application/json',
+              data: JSON.stringify(data)
+            }).then(data => {
+              localStorage.setItem('DataManagerToken', JSON.stringify(data.token))
+            }).catch(error => {
+              console.log(error)
+            })
+          }
         })
       })
     })
