@@ -174,6 +174,7 @@ export default {
       return `${base}/agent/admin/${this.type}/${result.id}`
     },
     deleteSelected () {
+      mixpanel.track(`Deleting type: ${this.type}.`)
       this.showWarningModal = false
       // Delete articles
       if (this.type === 'article') {
@@ -277,6 +278,7 @@ export default {
       })
     },
     onChange (page) {
+      mixpanel.track(`Fetching new page of results.`)
       let url = this.url + (this.isSearch ? `&page=${page}` : `?page=${page}`)
       client.request({
         type: 'GET',

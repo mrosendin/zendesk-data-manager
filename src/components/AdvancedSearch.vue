@@ -163,7 +163,7 @@ export default {
   },
   methods: {
     search () {
-      console.log(`Searching for ${this.type}`)
+      mixpanel.track(`Searching for ${this.type}`)
 
       let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`

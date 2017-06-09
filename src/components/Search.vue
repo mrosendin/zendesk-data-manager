@@ -129,7 +129,7 @@ export default {
           })
         })
       }
-      console.log(`Searching for ${this.type}`)
+      mixpanel.track(`Searching for ${this.type}`)
 
       let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`

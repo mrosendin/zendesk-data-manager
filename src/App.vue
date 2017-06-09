@@ -38,15 +38,9 @@ export default {
       menuOpen: false
     }
   },
-  methods: {
-    toggleMenu () {
-      this.menuOpen = !this.menuOpen
-      bus.$emit('menuToggled', this.menuOpen)
-    }
-  },
   watch: {
     '$route' () {
-      console.log(`Route changed to ${this.$route.path}. Clearing columns.`)
+      mixpanel.track(`Route changed to ${this.$route.path}.`)
       this.columns = []
     }
   },
@@ -56,6 +50,17 @@ export default {
       config.currentAccount = data['currentAccount']
       client.get('currentUser').then(data => {
         config.currentUser = data['currentUser']
+        mixpanel.identify(config.currentUser.id)
+        mixpanel.people.set({
+          '$email': config.currentUser.email,
+          '$name': config.currentUser.name,
+          '$role': config.currentUser.role,
+          '$locale': config.currentUser.locale,
+          '$avatar': config.currentUser.avatarUrl,
+          '$subdomain': config.currentAccount.subdomain,
+          '$plan_name': config.currentAccount.planName,
+          '$last_login': new Date()
+        })
         client.metadata().then(metadata => {
           config.settings = metadata.settings
           let token = localStorage.getItem('DataManagerToken')
