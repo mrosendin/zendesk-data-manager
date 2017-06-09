@@ -52,10 +52,13 @@ export default {
   },
   created () {
     // Get subdomain, current user information, etc.
-    client.get('currentAccount').then((data) => {
+    client.get('currentAccount').then(data => {
       config.currentAccount = data['currentAccount']
-      client.get('currentUser').then((data) => {
+      client.get('currentUser').then(data => {
         config.currentUser = data['currentUser']
+        client.metadata().then(metadata => {
+          config.settings = metadata.settings
+        })
       })
     })
 

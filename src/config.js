@@ -1,4 +1,5 @@
 export default {
   currentAccount: {},
-  currentUser: {}
+  currentUser: {},
+  settings: {}
 }
