@@ -53,7 +53,7 @@
         </div>
 
         <div class="level-right">
-          <a class="button is-success is-outlined">
+          <a class="button is-success is-outlined" @click="showDownloadModal = true">
             <span class="icon">
               <i class="fa fa-download"></i>
             </span>
@@ -99,11 +99,19 @@
       </pagination>
 
     </div>
+
+    <download-modal
+      :show="showDownloadModal"
+      :onClose="() => showDownloadModal = false"
+      :url="url">
+      </download-modal>
+
   </div>
 </template>
 
 <script>
 import Heading from './Heading.vue'
+import DownloadModal from './DownloadModal.vue'
 import Pagination from 'vue-2-bulma-pagination'
 import bus from '../bus.js'
 import config from '../config.js'
@@ -132,13 +140,14 @@ export default {
         success: '',
         error: ''
       },
+      showDownloadModal: false,
       showWarningModal: false,
       pagination: pagination,
       url: '',
       isSearch: false
     }
   },
-  components: { Heading, Pagination },
+  components: { Heading, DownloadModal, Pagination },
   computed: {
     count () {
       return this.results.length
