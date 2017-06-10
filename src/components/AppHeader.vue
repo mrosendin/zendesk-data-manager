@@ -4,10 +4,10 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            Data Manager
+            {{ nav }}
           </h1>
           <h2 class="subtitle">
-            {{ tab }}
+            {{ subnav }}
           </h2>
         </div>
       </div>
@@ -15,10 +15,10 @@
         <nav class="tabs is-centered is-boxed">
           <div class="container">
             <ul>
-              <router-link to="/primary" tag="li" active-class="is-active"><a href="#">Primary</a></router-link>
-              <router-link to="/metadata" tag="li" active-class="is-active"><a href="#">Metadata</a></router-link>
-              <router-link to="/importer" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link>
-              <router-link to="/documentation" tag="li" active-class="is-active"><a href="#"><i class="fa fa-book"></i>&nbsp;Documentation</a></router-link>
+              <router-link to="/primary" tag="li" active-class="is-active" @click.native="update('nav', 'Primary')"><a href="#">Primary</a></router-link>
+              <router-link to="/metadata" tag="li" active-class="is-active" @click.native="update('nav', 'Metadata')"><a href="#">Metadata</a></router-link>
+              <router-link to="/importer" tag="li" active-class="is-active" @click.native="update('nav', 'Import')"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link>
+              <router-link to="/documentation" tag="li" active-class="is-active" @click.native="update('nav', 'Documentation')"><a href="#"><i class="fa fa-book"></i>&nbsp;Documentation</a></router-link>
             </ul>
           </div>
         </nav>
@@ -52,7 +52,13 @@ export default {
   name: 'app-header',
   data () {
     return {
-      tab: 'Primary'
+      // Using named routes may be able to replace the need for this data
+      nav: 'Primary'
+    }
+  },
+  methods: {
+    update (type, value) {
+      this[type] = value
     }
   }
 }
