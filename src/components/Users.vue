@@ -41,7 +41,7 @@
              <span class="icon is-small is-left">
                <i class="fa fa-magic"></i>
              </span>
-            <p>
+           </p>
           </div>
         </div>
         <div class="column is-3">

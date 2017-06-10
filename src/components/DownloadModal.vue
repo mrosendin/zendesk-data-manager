@@ -89,6 +89,7 @@ export default {
       }
       // get email/token, encrypt, create request and send as header
       // send the search url with parameters as body
+      // poll the status endpoint and update progress bar
     }
   },
   computed: {
