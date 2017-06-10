@@ -22,25 +22,27 @@ const router = new VueRouter({
     else return { x: 0, y: 0 }
   },
   routes: [
-    { path: '*', redirect: '/articles' },
-    { path: '/', redirect: '/articles' },
-    { path: '/articles', component: Articles },
-    { path: '/automations', component: Automations },
+    { path: '*', redirect: '/primary' },
+    { path: '/', redirect: '/primary' },
+    { path: '/primary', redirect: '/primary/tickets' },
+    { path: '/primary/articles', component: Articles },
+    { path: '/primary/groups', component: Groups },
+    { path: '/primary/organizations', component: Organizations },
+    { path: '/primary/tickets', component: Tickets },
+    { path: '/primary/users', component: Users },
+    { path: '/metadata', redirect: '/metadata/automations' },
+    { path: '/metadata/automations', component: Automations },
+    { path: '/metadata/macros', component: Macros },
+    { path: '/metadata/triggers', component: Triggers },
+    { path: '/metadata/views', component: Views },
+    { path: '/importer', component: Importer },
     { path: '/documentation', component: Documentation, children: [
       { path: '/documentation', redirect: '/documentation/introduction' },
       { path: '/documentation/contact', component: Contact },
       { path: '/documentation/introduction', component: Introduction },
       { path: '/documentation/examples', component: Examples },
       { path: '/documentation/importing-data', component: ImportingData }
-    ] },
-    { path: '/groups', component: Groups },
-    { path: '/importer', component: Importer },
-    { path: '/macros', component: Macros },
-    { path: '/organizations', component: Organizations },
-    { path: '/tickets', component: Tickets },
-    { path: '/triggers', component: Triggers },
-    { path: '/users', component: Users },
-    { path: '/views', component: Views },
+    ] }
   ]
 })
 

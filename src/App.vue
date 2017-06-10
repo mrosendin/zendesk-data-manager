@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="container is-fluid">
+    <app-header/>
 
-      <app-header/>
+    <div class="container is-fluid">
 
       <div class="columns">
         <div class="column">
@@ -97,9 +97,6 @@ export default {
 </script>
 
 <style>
-body {
-  margin-top: 15px;
-}
 .heading {
   text-transform: none;
 }
