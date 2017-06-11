@@ -18,7 +18,7 @@ export default {
 
 <style scoped>
   span {
-    margin: 10px;
+    margin: 5px 0px;
   }
   span:hover {
     cursor: pointer;
