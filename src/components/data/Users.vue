@@ -18,7 +18,7 @@
           <div class="field">
             <label class="label">Name</label>
             <p class="control has-icons-left">
-             <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="name"></typeahead>
+             <typeahead :source="autocomplete.users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="name"></typeahead>
              <span class="icon is-small is-left">
                <i class="fa fa-magic"></i>
              </span>
@@ -37,7 +37,7 @@
           <div class="field">
             <label class="label">Organization</label>
             <p class="control has-icons-left">
-             <typeahead :source="organizations" :onSelect="onSelect" :onChange="onChange" :limit="5" name="organization"></typeahead>
+             <typeahead :source="autocomplete.organizations" :onSelect="onSelect" :onChange="onChange" :limit="5" name="organization"></typeahead>
              <span class="icon is-small is-left">
                <i class="fa fa-magic"></i>
              </span>
@@ -83,7 +83,7 @@
           <div class="field">
             <label class="label">Tags</label>
             <p class="control has-icons-left">
-             <typeahead :source="tags" :onSelect="onSelect" :onChange="onChange" :limit="5" name="tags"></typeahead>
+             <typeahead :source="autocomplete.tags" :onSelect="onSelect" :onChange="onChange" :limit="5" name="tags"></typeahead>
              <span class="icon is-small is-left">
                <i class="fa fa-magic"></i>
              </span>
@@ -129,9 +129,11 @@ export default {
         phone: '',
         tags: ''
       },
-      organizations: [],
-      users: [],
-      tags: []
+      autocomplete: {
+        organizations: [],
+        users: [],
+        tags: []
+      }
     }
   },
   methods: {
@@ -150,7 +152,7 @@ export default {
       }
 
       client.request(url).then(response => {
-        this[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+        this.autocomplete[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
       }).catch(error => {
         console.log(error)
       })

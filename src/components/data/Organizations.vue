@@ -24,8 +24,11 @@
         <div class="column is-4">
           <div class="field">
             <label class="label">Tags</label>
-            <p class="control">
-              <input class="input" type="text" v-model="filters.tags">
+            <p class="control has-icons-left">
+             <typeahead :source="autocomplete.tags" :onSelect="onSelect" :onChange="onChange" :limit="5" name="tags"></typeahead>
+             <span class="icon is-small is-left">
+               <i class="fa fa-magic"></i>
+             </span>
             </p>
           </div>
         </div>
@@ -63,6 +66,7 @@
 
 <script>
 import DateFilter from './filters/DateFilter.vue'
+import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
@@ -70,7 +74,7 @@ import columns from '../../common/columns.js'
 
 export default {
   name: 'organizations',
-  components: { DateFilter, ColumnSelection, AdvancedSearch },
+  components: { DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: columns.organizationColumns,
@@ -80,7 +84,24 @@ export default {
         notes: '',
         details: '',
         tags: ''
+      },
+      autocomplete: {
+        tags: []
       }
+    }
+  },
+  methods: {
+    onChange (value, name) {
+      this.filters[name] = value
+
+      client.request(`/api/v2/autocomplete/tags.json?name=${value}`).then(response => {
+        this.autocomplete.tags = response.tags
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    onSelect (value, name) {
+      this.filters[name] = value
     }
   },
   mounted () {
