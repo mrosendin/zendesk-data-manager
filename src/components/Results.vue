@@ -247,7 +247,7 @@ export default {
       }
     },
     format (results) {
-      console.log(`Displaying ${results.length} results.`)
+      console.log(`Formatting ${results.length} results.`)
       return new Promise((resolve, reject) => {
         // Basic formatting
         results.forEach((result, index) => {
@@ -317,6 +317,9 @@ export default {
         this.pagination.total = total
       })
     })
+  },
+  beforeDestroy () {
+    bus.$off('results-fetched')
   }
 }
 </script>

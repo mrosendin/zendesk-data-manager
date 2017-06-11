@@ -168,7 +168,7 @@ export default {
       }
 
       client.request(url).then(response => {
-        this[resource] = (response.hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+        this[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
       }).catch(error => {
         console.log(error)
       })

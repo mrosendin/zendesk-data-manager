@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div class="columns results">
+      <div class="columns results" v-if="$route.path.indexOf('importer') !== -1">
         <div class="column">
           <results :columns="columns"></results>
         </div>

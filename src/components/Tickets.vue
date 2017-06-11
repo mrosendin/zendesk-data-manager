@@ -75,7 +75,7 @@
             <label class="label">Assignee</label>
             <p class="control">
               <p class="control has-icons-left">
-               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="assignee"></typeahead>
+               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="assignee" :async="true"></typeahead>
                <span class="icon is-small is-left">
                  <i class="fa fa-magic"></i>
                </span>
@@ -87,7 +87,7 @@
             <label class="label">Requester</label>
             <p class="control">
               <p class="control has-icons-left">
-               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="requester"></typeahead>
+               <typeahead :source="users" :onSelect="onSelect" :onChange="onChange" :limit="5" name="requester" :async="true"></typeahead>
                <span class="icon is-small is-left">
                  <i class="fa fa-magic"></i>
                </span>
@@ -252,7 +252,9 @@ export default {
       }
 
       client.request(url).then(response => {
-        this[resource] = (response.hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+        if (response[resource].length) {
+          this[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
+        }
       }).catch(error => {
         console.log(error)
       })
