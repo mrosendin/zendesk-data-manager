@@ -2,7 +2,7 @@
   <div id="import">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Import Data</h4>
+      <h4 class="title is-4">Import Data</h4>
     </div>
 
     <dropzone id="vue-dropzone" :use-font-awesome="true" :language="{dictDefaultMessage: '<br>Drop files here to upload (CSV or JSON supported)'}" :acceptedFileTypes="'application/json,text/csv'" url="http://locahost:3000/api/data-manager/import" v-on:vdropzone-success="showSuccess = true">

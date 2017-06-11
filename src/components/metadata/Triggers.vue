@@ -2,7 +2,7 @@
   <div id="triggers">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Triggers</h4>
+      <h4 class="title is-4">Triggers</h4>
     </div>
 
     <div class="columns">

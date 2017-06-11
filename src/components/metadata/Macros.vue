@@ -2,7 +2,7 @@
   <div id="macros">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Macros</h4>
+      <h4 class="title is-4">Macros</h4>
     </div>
 
     <div class="columns">

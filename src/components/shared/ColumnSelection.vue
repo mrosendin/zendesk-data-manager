@@ -2,7 +2,7 @@
   <div id="column-selection" class="box">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Column Selection</h4>
+      <h4 class="title is-4">Column Selection</h4>
     </div>
 
     <h5 class="title is-5">System Fields</h5>
@@ -12,10 +12,9 @@
           <div class="field-body wrap">
             <div class="field is-grouped no-grow" v-for="column in columns">
               <p class="control">
-                <label class="checkbox">
-                  <input type="checkbox" v-model="column.selected">
-                  {{column.name}}
-                </label>
+                <column-button :selected="column.selected" @click.native="column.selected = !column.selected">
+                  {{ column.name }}
+                </column-button>
               </p>
             </div>
           </div>
@@ -31,10 +30,9 @@
             <div class="field-body wrap">
               <div class="field is-grouped no-grow" v-for="customField in customFields">
                 <p class="control">
-                  <label class="checkbox">
-                    <input type="checkbox" v-model="customField.selected">
-                    {{customField.name}}
-                  </label>
+                  <column-button :selected="customField.selected" @click.native="customField.selected = !customField.selected">
+                    {{ customField.name }}
+                  </column-button>
                 </p>
               </div>
             </div>
@@ -47,8 +45,11 @@
 </template>
 
 <script>
+import ColumnButton from './ColumnButton.vue'
+
 export default {
   name: 'column-selection',
+  components: { ColumnButton },
   props: {
     columns: {
       default: () => [],

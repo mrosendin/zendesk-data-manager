@@ -2,7 +2,7 @@
   <div id="automations">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Automations</h4>
+      <h4 class="title is-4">Automations</h4>
     </div>
 
     <div class="columns">

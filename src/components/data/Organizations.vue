@@ -3,7 +3,7 @@
 
     <div class="box">
       <div class="content has-text-centered">
-        <h4 class="title is-4" class="header">Organization Filters</h4>
+        <h4 class="title is-4">Organization Filters</h4>
       </div>
 
       <div class="columns">

@@ -3,7 +3,7 @@
 
     <div class="has-centered-text">
       <div class="content has-text-centered">
-        <h4 class="title is-4" class="header">Results: {{this.pagination.total}}</h4>
+        <h4 class="title is-4">Results: {{this.pagination.total}}</h4>
       </div>
     </div>
 
