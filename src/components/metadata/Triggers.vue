@@ -1,8 +1,8 @@
 <template>
-  <div id="views">
+  <div id="triggers">
 
     <div class="content has-text-centered">
-      <h4 class="title is-4" class="header">Views</h4>
+      <h4 class="title is-4" class="header">Triggers</h4>
     </div>
 
     <div class="columns">
@@ -11,17 +11,17 @@
       </div>
     </div>
 
-    <search type="views"/>
+    <search type="triggers"/>
   </div>
 </template>
 
 <script>
-import ColumnSelection from './ColumnSelection.vue'
-import Search from './Search.vue'
-import bus from '../bus.js'
+import ColumnSelection from '../shared/ColumnSelection.vue'
+import Search from './shared/Search.vue'
+import bus from '../../common/bus.js'
 
 export default {
-  name: 'views',
+  name: 'triggers',
   components: { ColumnSelection, Search },
   data () {
     return {
@@ -29,18 +29,20 @@ export default {
         { name: 'Id', value: 'id', selected: true },
         { name: 'Title', value: 'title', selected: true },
         { name: 'Active', value: 'active', selected: true },
+        { name: 'Description', value: 'description', selected: true },
         { name: 'Position', value: 'position', selected: true },
-        { name: 'Execution', value: 'execution', selected: true },
         { name: 'Conditions', value: 'conditions', selected: true },
-        { name: 'Restriction', value: 'restriction', selected: true }
+        { name: 'Actions', value: 'actions', selected: true },
+        { name: 'Updated At', value: 'updated_at', selected: true },
+        { name: 'Created At', value: 'created_at', selected: true }
       ]
     }
   },
   mounted () {
     bus.$emit('columnToggled', this.columns)
-    let url = '/api/v2/views.json'
+    let url = '/api/v2/triggers.json'
     client.request(url).then(data => {
-      bus.$emit('results-fetched', data.views, 'views', url, 30, data.count, false)
+      bus.$emit('results-fetched', data.triggers, 'triggers', url, 30, data.count, false)
     }).catch(error => {
       console.log(error)
     })

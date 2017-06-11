@@ -175,14 +175,14 @@
 </template>
 
 <script>
-import DateFilter from './DateFilter.vue'
-import StatusFilter from './StatusFilter.vue'
-import PriorityFilter from './PriorityFilter.vue'
-import TicketTypeFilter from './TicketTypeFilter.vue'
+import DateFilter from './filters/DateFilter.vue'
+import StatusFilter from './filters/StatusFilter.vue'
+import PriorityFilter from './filters/PriorityFilter.vue'
+import TicketTypeFilter from './filters/TicketTypeFilter.vue'
 import Typeahead from 'vue-bulma-typeahead'
-import ColumnSelection from './ColumnSelection.vue'
-import AdvancedSearch from './AdvancedSearch.vue'
-import bus from '../bus.js'
+import ColumnSelection from '../shared/ColumnSelection.vue'
+import AdvancedSearch from './shared/AdvancedSearch.vue'
+import bus from '../../common/bus.js'
 
 export default {
   name: 'tickets',

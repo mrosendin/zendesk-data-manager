@@ -1,5 +1,5 @@
 <template>
-  <div id="importer">
+  <div id="import">
 
     <div class="content has-text-centered">
       <h4 class="title is-4" class="header">Import Data</h4>
@@ -23,7 +23,7 @@ import Dropzone from 'vue2-dropzone'
 // See https://github.com/rowanwins/vue-dropzone for more information.
 
 export default {
-  name: 'importer',
+  name: 'import',
   components: { Dropzone }
 }
 </script>

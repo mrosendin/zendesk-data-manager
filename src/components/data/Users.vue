@@ -104,12 +104,12 @@
 </template>
 
 <script>
-import DateFilter from './DateFilter.vue'
-import RoleFilter from './RoleFilter.vue'
+import DateFilter from './filters/DateFilter.vue'
+import RoleFilter from './filters/RoleFilter.vue'
 import Typeahead from 'vue-bulma-typeahead'
-import ColumnSelection from './ColumnSelection.vue'
-import AdvancedSearch from './AdvancedSearch.vue'
-import bus from '../bus.js'
+import ColumnSelection from '../shared/ColumnSelection.vue'
+import AdvancedSearch from './shared/AdvancedSearch.vue'
+import bus from '../../common/bus.js'
 
 export default {
   name: 'users',

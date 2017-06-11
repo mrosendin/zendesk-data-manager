@@ -10,7 +10,7 @@
             <ul>
               <router-link to="/data" tag="li" active-class="is-active"><a href="#">Data</a></router-link>
               <router-link to="/metadata" tag="li" active-class="is-active"><a href="#">Metadata</a></router-link>
-              <router-link to="/importer" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link>
+              <router-link to="/import" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link>
               <router-link to="/documentation" tag="li" active-class="is-active"><a href="#"><i class="fa fa-book"></i>&nbsp;Documentation</a></router-link>
             </ul>
           </div>

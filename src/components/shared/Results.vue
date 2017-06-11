@@ -112,9 +112,9 @@
 <script>
 import DownloadModal from './DownloadModal.vue'
 import Pagination from 'vue-2-bulma-pagination'
-import bus from '../bus.js'
-import config from '../config.js'
-import Sideload from '../sideload.js'
+import bus from '../../common/bus.js'
+import config from '../../common/config.js'
+import Sideload from '../../common/sideload.js'
 
 let pagination = {
   current: 1,

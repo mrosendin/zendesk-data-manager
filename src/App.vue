@@ -3,19 +3,17 @@
     <app-header/>
 
     <div class="container is-fluid">
-
       <div class="columns">
         <div class="column">
           <router-view></router-view>
         </div>
       </div>
 
-      <div class="columns results" v-if="$route.path.indexOf('importer') === -1">
+      <div class="columns results" v-if="$route.path.indexOf('import') === -1">
         <div class="column">
           <results :columns="columns"></results>
         </div>
       </div>
-
     </div>
 
     <app-footer/>
@@ -23,11 +21,11 @@
 </template>
 
 <script>
-import AppHeader from './components/AppHeader.vue'
-import Results from './components/Results.vue'
-import AppFooter from './components/AppFooter.vue'
-import bus from './bus.js'
-import config from './config.js'
+import AppHeader from './components/shared/AppHeader.vue'
+import Results from './components/shared/Results.vue'
+import AppFooter from './components/shared/AppFooter.vue'
+import bus from './common/bus.js'
+import config from './common/config.js'
 
 export default {
   name: 'app',

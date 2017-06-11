@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import bus from '../bus.js'
+import bus from '../../../common/bus.js'
 
 export default {
   name: 'date-filter',

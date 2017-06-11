@@ -1,19 +1,19 @@
 import App from './App.vue'
-import Articles from './components/Articles.vue'
-import Automations from './components/Automations.vue'
+import Articles from './components/data/Articles.vue'
+import Automations from './components/metadata/Automations.vue'
 import Contact from './components/documentation/Contact.vue'
 import Documentation from './components/documentation/Documentation.vue'
 import Examples from './components/documentation/Examples.vue'
-import Groups from './components/Groups.vue'
-import Importer from './components/Importer.vue'
+import Groups from './components/data/Groups.vue'
+import Import from './components/import/Import.vue'
 import ImportingData from './components/documentation/ImportingData.vue'
 import Introduction from './components/documentation/Introduction.vue'
-import Macros from './components/Macros.vue'
-import Organizations from './components/Organizations.vue'
-import Tickets from './components/Tickets.vue'
-import Triggers from './components/Triggers.vue'
-import Users from './components/Users.vue'
-import Views from './components/Views.vue'
+import Macros from './components/metadata/Macros.vue'
+import Organizations from './components/data/Organizations.vue'
+import Tickets from './components/data/Tickets.vue'
+import Triggers from './components/metadata/Triggers.vue'
+import Users from './components/data/Users.vue'
+import Views from './components/metadata/Views.vue'
 
 const router = new VueRouter({
   mode: 'history',
@@ -35,7 +35,7 @@ const router = new VueRouter({
     { path: '/metadata/macros', component: Macros },
     { path: '/metadata/triggers', component: Triggers },
     { path: '/metadata/views', component: Views },
-    { path: '/importer', component: Importer },
+    { path: '/import', component: Import },
     { path: '/documentation', component: Documentation, children: [
       { path: '/documentation', redirect: '/documentation/introduction' },
       { path: '/documentation/contact', component: Contact },

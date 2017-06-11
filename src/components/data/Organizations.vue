@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import DateFilter from './DateFilter.vue'
-import ColumnSelection from './ColumnSelection.vue'
-import AdvancedSearch from './AdvancedSearch.vue'
-import bus from '../bus.js'
+import DateFilter from './filters/DateFilter.vue'
+import ColumnSelection from '../shared/ColumnSelection.vue'
+import AdvancedSearch from './shared/AdvancedSearch.vue'
+import bus from '../../common/bus.js'
 
 export default {
   name: 'organizations',
