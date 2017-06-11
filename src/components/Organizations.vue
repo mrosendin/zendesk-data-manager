@@ -109,7 +109,7 @@ export default {
       this.customFields = data.organization_fields.map((field) => {
         return {
           name: field.title,
-          value: `custom_field_${field.id}`,
+          value: field.key,
           selected: false
         }
       })

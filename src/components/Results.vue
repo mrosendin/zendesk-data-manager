@@ -259,6 +259,11 @@ export default {
                 result[`custom_field_${customField.id}`] = customField.value
               })
             }
+            if (['user_fields', 'organization_fields'].includes(key)) {
+              for (let fieldKey in result[key]) {
+                result[fieldKey] = result[key][fieldKey]
+              }
+            }
             if (Array.isArray(result[key])) result[key] = result[key].join(', ')
             if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
           }
