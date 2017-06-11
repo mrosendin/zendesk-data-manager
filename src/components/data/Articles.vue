@@ -28,23 +28,12 @@ import DateFilter from './filters/DateFilter.vue'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
+import columns from '../../common/columns.js'
 
 export default {
   name: 'articles',
   components: { DateFilter, ColumnSelection, AdvancedSearch },
-  data () {
-    return {
-      columns: [
-        { name: 'Id', value: 'id', selected: true },
-        { name: 'Title', value: 'title', selected: true },
-        { name: 'Locale', value: 'locale', selected: true },
-        { name: 'Brand Name', value: 'brand_name', selected: true },
-        { name: 'Brand Id', value: 'brand_id', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true }
-      ]
-    }
-  },
+  data () { return { columns: columns.articleColumns } },
   mounted () {
     // Need to set the columns, since in other files this is normally triggered
     // when getting custom fields

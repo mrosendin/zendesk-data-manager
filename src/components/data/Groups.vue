@@ -39,18 +39,14 @@ import DateFilter from './filters/DateFilter.vue'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
+import columns from '../../common/columns.js'
 
 export default {
   name: 'groups',
   components: { DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
-      columns: [
-        { name: 'Id', value: 'id', selected: true },
-        { name: 'Name', value: 'name', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true }
-      ],
+      columns: columns.groupColumns,
       filters: {
         name: ''
       }

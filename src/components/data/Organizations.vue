@@ -66,23 +66,14 @@ import DateFilter from './filters/DateFilter.vue'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
+import columns from '../../common/columns.js'
 
 export default {
   name: 'organizations',
   components: { DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
-      columns: [
-        { name: 'Id', value: 'id', selected: true },
-        { name: 'Name', value: 'name', selected: true },
-        { name: 'Details', value: 'details', selected: true },
-        { name: 'Tags', value: 'tags', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true },
-        { name: 'External Id', value: 'external_id', selected: false },
-        { name: 'Group Id', value: 'group_id', selected: false },
-        { name: 'Notes', value: 'notes', selected: false },
-      ],
+      columns: columns.organizationColumns,
       customFields: [],
       filters: {
         name: '',

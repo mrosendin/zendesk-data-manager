@@ -110,31 +110,14 @@ import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
+import columns from '../../common/columns.js'
 
 export default {
   name: 'users',
   components: { DateFilter, RoleFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
-      columns: [
-        { name: 'Id', value: 'id', selected: true },
-        { name: 'Name', value: 'name', selected: true },
-        { name: 'Email', value: 'email', selected: true },
-        { name: 'Phone', value: 'phone', selected: true },
-        { name: 'Organization Id', value: 'organization_id', selected: true, sideload: {type: 'organizations'} },
-        { name: 'Role', value: 'role', selected: true },
-        { name: 'Tags', value: 'tags', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true },
-        { name: 'External Id', value: 'external_id', selected: false },
-        { name: 'Active', value: 'active', selected: false },
-        { name: 'Chat Only', value: 'chat_only', selected: false },
-        { name: 'Last Login At', value: 'last_login_at', selected: false },
-        { name: 'Notes', value: 'notes', selected: false },
-        { name: 'Time Zone', value: 'time_zone', selected: false },
-        { name: 'Locale', value: 'locale', selected: false },
-        { name: 'Verified', value: 'verified', selected: false }
-      ],
+      columns: columns.userColumns,
       customFields: [],
       filters: {
         name: '',

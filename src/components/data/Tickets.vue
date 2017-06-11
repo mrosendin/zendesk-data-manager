@@ -183,38 +183,14 @@ import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
 import bus from '../../common/bus.js'
+import columns from '../../common/columns.js'
 
 export default {
   name: 'tickets',
   components: { StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
-      columns: [
-        { name: 'Id', value: 'id', selected: true },
-        { name: 'Subject', value: 'subject', selected: true },
-        { name: 'Type', value: 'type', selected: true },
-        { name: 'Group Id', value: 'group_id', selected: true },
-        { name: 'Assignee Id', value: 'assignee_id', selected: true, sideload: {type: 'users'} },
-        { name: 'Requester Id', value: 'requester_id', selected: true, sideload: {type: 'users'} },
-        { name: 'Status', value: 'status', selected: true },
-        { name: 'Priority', value: 'priority', selected: true },
-        { name: 'Created At', value: 'created_at', selected: true },
-        { name: 'Updated At', value: 'updated_at', selected: true },
-        { name: 'External Id', value: 'external_id', selected: false },
-        { name: 'Channel', value: 'channel', selected: false },
-        { name: 'Description', value: 'description', selected: false },
-        { name: 'Recipient', value: 'recipient', selected: false },
-        { name: 'Submitter Id', value: 'submitter_id', selected: false, sideload: {type: 'users'} },
-        { name: 'Organization Id', value: 'organization_id', selected: false, sideload: {type: 'organizations'} },
-        { name: 'Collaborator Ids', value: 'collaborator_ids', selected: false, sideload: {type: 'users'} },
-        { name: 'Forum Topic Id', value: 'forum_topic_id', selected: false },
-        { name: 'Problem Id', value: 'problem_id', selected: false },
-        { name: 'Due At', value: 'due_at', selected: false },
-        { name: 'Brand Id', value: 'brand_id', selected: false },
-        { name: 'Has Incidents', value: 'has_incidents', selected: false },
-        { name: 'Tags', value: 'tags', selected: false },
-        { name: 'Satisfaction Rating', value: 'satisfaction_rating', selected: false }
-      ],
+      columns: columns.ticketColumns,
       customFields: [],
       filters: {
         group: '',
