@@ -46,6 +46,11 @@
               </div>
             </div>
           </div>
+          <div class="columns">
+            <div class="column">
+              <progress class="progress is-success" value="60" max="100">60%</progress>
+            </div>
+          </div>
         </section>
         <footer class="modal-card-foot pull-right">
           <a class="button is-success" @click="start">Start</a>
