@@ -2,9 +2,9 @@
   <div id="users">
 
     <div class="box">
-      <heading>
-        <h4 slot="header" class="title is-4">User Filters</h4>
-      </heading>
+      <div class="content has-text-centered">
+        <h4 class="title is-4" class="header">User Filters</h4>
+      </div>
 
       <div class="columns">
         <div class="center-inline-filters">
@@ -104,7 +104,6 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import RoleFilter from './RoleFilter.vue'
 import Typeahead from 'vue-bulma-typeahead'
@@ -114,7 +113,7 @@ import bus from '../bus.js'
 
 export default {
   name: 'users',
-  components: { Heading, DateFilter, RoleFilter, Typeahead, ColumnSelection, AdvancedSearch },
+  components: { DateFilter, RoleFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [

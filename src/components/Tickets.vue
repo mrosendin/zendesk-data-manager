@@ -2,9 +2,9 @@
   <div id="tickets">
 
     <div class="box">
-      <heading>
-        <h4 slot="header" class="title is-4">Ticket Filters</h4>
-      </heading>
+      <div class="content has-text-centered">
+        <h4 class="title is-4" class="header">Ticket Filters</h4>
+      </div>
 
       <div class="columns">
         <div class="center-inline-filters">
@@ -175,7 +175,6 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import StatusFilter from './StatusFilter.vue'
 import PriorityFilter from './PriorityFilter.vue'
@@ -187,7 +186,7 @@ import bus from '../bus.js'
 
 export default {
   name: 'tickets',
-  components: { Heading, StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
+  components: { StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [

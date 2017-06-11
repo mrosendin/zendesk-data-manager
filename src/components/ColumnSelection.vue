@@ -1,10 +1,9 @@
 <template>
   <div id="column-selection" class="box">
 
-    <heading>
-      <h4 slot="header" class="title is-4">Column Selection</h4>
-      <p slot="subtitle" class="subtitle is-5">Select the fields to display in the search results</p>
-    </heading>
+    <div class="content has-text-centered">
+      <h4 class="title is-4" class="header">Column Selection</h4>
+    </div>
 
     <h5 class="title is-5">System Fields</h5>
     <div class="columns">
@@ -48,11 +47,8 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
-
 export default {
   name: 'column-selection',
-  components: { Heading },
   props: {
     columns: {
       default: () => [],

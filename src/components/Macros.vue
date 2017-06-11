@@ -1,9 +1,9 @@
 <template>
   <div id="macros">
 
-    <heading>
-      <h4 slot="header" class="title is-4">Macros</h4>
-    </heading>
+    <div class="content has-text-centered">
+      <h4 class="title is-4" class="header">Macros</h4>
+    </div>
 
     <div class="columns">
       <div class="column">
@@ -16,14 +16,13 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import Search from './Search.vue'
 import bus from '../bus.js'
 
 export default {
   name: 'macros',
-  components: { Heading, ColumnSelection, Search },
+  components: { ColumnSelection, Search },
   data () {
     return {
       columns: [

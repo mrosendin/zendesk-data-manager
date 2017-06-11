@@ -20,7 +20,7 @@
     <nav class="nav has-shadow">
       <div class="container">
         <div class="nav-center">
-          <template v-if="$route.path.indexOf('data') > -1">
+          <template v-if="$route.path.indexOf('data') === 1">
             <router-link to="/data/tickets" class="nav-item is-tab" active-class="is-active">Tickets</router-link>
             <router-link to="/data/users" class="nav-item is-tab" active-class="is-active">Users</router-link>
             <router-link to="/data/organizations" class="nav-item is-tab" active-class="is-active">Organizations</router-link>

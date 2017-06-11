@@ -2,9 +2,9 @@
   <div id="organizations">
 
     <div class="box">
-      <heading>
-        <h4 slot="header" class="title is-4">Organization Filters</h4>
-      </heading>
+      <div class="content has-text-centered">
+        <h4 class="title is-4" class="header">Organization Filters</h4>
+      </div>
 
       <div class="columns">
         <div class="center-inline-filters">
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
 import DateFilter from './DateFilter.vue'
 import ColumnSelection from './ColumnSelection.vue'
 import AdvancedSearch from './AdvancedSearch.vue'
@@ -70,7 +69,7 @@ import bus from '../bus.js'
 
 export default {
   name: 'organizations',
-  components: { Heading, DateFilter, ColumnSelection, AdvancedSearch },
+  components: { DateFilter, ColumnSelection, AdvancedSearch },
   data () {
     return {
       columns: [

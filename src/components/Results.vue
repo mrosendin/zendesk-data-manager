@@ -2,9 +2,9 @@
   <div id="results" v-if="complete" class="box">
 
     <div class="has-centered-text">
-      <heading>
-        <h4 slot="header" class="title is-4">{{this.pagination.total}} Result(s)</h4>
-      </heading>
+      <div class="content has-text-centered">
+        <h4 class="title is-4" class="header">Results: {{this.pagination.total}}</h4>
+      </div>
     </div>
 
     <div class="columns">
@@ -110,7 +110,6 @@
 </template>
 
 <script>
-import Heading from './Heading.vue'
 import DownloadModal from './DownloadModal.vue'
 import Pagination from 'vue-2-bulma-pagination'
 import bus from '../bus.js'
@@ -147,7 +146,7 @@ export default {
       isSearch: false
     }
   },
-  components: { Heading, DownloadModal, Pagination },
+  components: { DownloadModal, Pagination },
   computed: {
     count () {
       return this.results.length
