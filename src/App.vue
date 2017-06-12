@@ -1,21 +1,9 @@
 <template>
   <div id="app">
     <app-header/>
-
     <div class="container is-fluid">
-      <div class="columns">
-        <div class="column">
-          <router-view></router-view>
-        </div>
-      </div>
-
-      <div class="columns results" v-if="$route.path.indexOf('import') === -1">
-        <div class="column">
-          <results :columns="columns"></results>
-        </div>
-      </div>
+      <router-view></router-view>
     </div>
-
     <app-footer/>
   </div>
 </template>

@@ -8,11 +8,31 @@ export default {
     { name: 'Created At', value: 'created_at', selected: true },
     { name: 'Updated At', value: 'updated_at', selected: true }
   ],
+  automationColumns: [
+    { name: 'Id', value: 'id', selected: true },
+    { name: 'Title', value: 'title', selected: true },
+    { name: 'Active', value: 'active', selected: true },
+    { name: 'Actions', value: 'actions', selected: true },
+    { name: 'Conditions', value: 'conditions', selected: true },
+    { name: 'Created At', value: 'created_at', selected: true },
+    { name: 'Updated At', value: 'updated_at', selected: true },
+    { name: 'Highlights', value: 'highlights', selected: false },
+    { name: 'Position', value: 'position', selected: false }
+  ],
   groupColumns: [
     { name: 'Id', value: 'id', selected: true },
     { name: 'Name', value: 'name', selected: true },
     { name: 'Created At', value: 'created_at', selected: true },
     { name: 'Updated At', value: 'updated_at', selected: true }
+  ],
+  macroColumns: [
+    { name: 'Id', value: 'id', selected: true },
+    { name: 'Title', value: 'title', selected: true },
+    { name: 'Active', value: 'active', selected: true },
+    { name: 'Description', value: 'description', selected: true },
+    { name: 'Position', value: 'position', selected: true },
+    { name: 'Actions', value: 'actions', selected: true },
+    { name: 'Restriction', value: 'restriction', selected: true }
   ],
   organizationColumns: [
     { name: 'Id', value: 'id', selected: true },
@@ -51,6 +71,17 @@ export default {
     { name: 'Tags', value: 'tags', selected: false },
     { name: 'Satisfaction Rating', value: 'satisfaction_rating', selected: false }
   ],
+  triggerColumns: [
+    { name: 'Id', value: 'id', selected: true },
+    { name: 'Title', value: 'title', selected: true },
+    { name: 'Active', value: 'active', selected: true },
+    { name: 'Description', value: 'description', selected: true },
+    { name: 'Position', value: 'position', selected: true },
+    { name: 'Conditions', value: 'conditions', selected: true },
+    { name: 'Actions', value: 'actions', selected: true },
+    { name: 'Updated At', value: 'updated_at', selected: true },
+    { name: 'Created At', value: 'created_at', selected: true }
+  ],
   userColumns: [
     { name: 'Id', value: 'id', selected: true },
     { name: 'Name', value: 'name', selected: true },
@@ -69,5 +100,14 @@ export default {
     { name: 'Time Zone', value: 'time_zone', selected: false },
     { name: 'Locale', value: 'locale', selected: false },
     { name: 'Verified', value: 'verified', selected: false }
+  ],
+  viewColumns: [
+    { name: 'Id', value: 'id', selected: true },
+    { name: 'Title', value: 'title', selected: true },
+    { name: 'Active', value: 'active', selected: true },
+    { name: 'Position', value: 'position', selected: true },
+    { name: 'Execution', value: 'execution', selected: true },
+    { name: 'Conditions', value: 'conditions', selected: true },
+    { name: 'Restriction', value: 'restriction', selected: true }
   ]
 }

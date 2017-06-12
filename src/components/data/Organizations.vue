@@ -60,7 +60,37 @@
       </div>
     </div>
 
-    <advanced-search type="organization" :filters="filters"></advanced-search>
+    <advanced-search type="organization" :filters="filters" :onFetch="onFetch"></advanced-search>
+
+    <div class="columns" v-if="messages.success">
+      <div class="column">
+        <div class="notification is-success">
+          <button class="delete" @click="messages.success = ''"></button>
+            {{messages.success}}
+        </div>
+      </div>
+    </div>
+
+    <div class="columns" v-if="messages.error">
+      <div class="column">
+        <div class="notification is-danger">
+          <button class="delete" @click="messages.error = ''"></button>
+            {{messages.error}}
+        </div>
+      </div>
+    </div>
+
+    <div class="columns results">
+      <div class="column">
+        <results :columns="this.columns.concat(this.customFields)"
+          :results="results"
+          type="organizations"
+          :resultCount="resultCount"
+          :perPage="perPage"
+          :onDelete="onDelete">
+        </results>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,15 +99,30 @@ import DateFilter from './filters/DateFilter.vue'
 import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
+import Results from '../shared/Results.vue'
 import bus from '../../common/bus.js'
 import columns from '../../common/columns.js'
+import format from '../../common/format.js'
 
 export default {
   name: 'organizations',
-  components: { DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
+  components: {
+    DateFilter,
+    Typeahead,
+    ColumnSelection,
+    AdvancedSearch,
+    Results
+  },
   data () {
     return {
       columns: columns.organizationColumns,
+      results: [],
+      resultCount: 0,
+      perPage: 30,
+      messages: {
+        success: '',
+        error: ''
+      },
       customFields: [],
       filters: {
         name: '',
@@ -91,6 +136,29 @@ export default {
     }
   },
   methods: {
+    onFetch (results, resultCount) {
+      format(results, 'organizations', this.columns).then(results => {
+        this.results = results
+        this.resultCount = resultCount
+        this.perPage = 100
+      })
+    },
+    onDelete (ids) {
+      let count = ids.length
+      ids.forEach((id) => {
+        client.request({
+          url: `/api/v2/organizations/destroy_many.json?ids=${ids.join(',')}`,
+          method: 'DELETE'
+        }).then(() => {
+          this.resultCount--
+          this.results = this.results.filter((result) => {
+            return !ids.includes(result.id)
+          })
+          if (count > 1) this.messages.success = `${count} organizations have been deleted.`
+          else this.messages.success = `${count} organization has been deleted.`
+        })
+      })
+    },
     onChange (value, name) {
       this.filters[name] = value
 
@@ -105,15 +173,15 @@ export default {
     }
   },
   mounted () {
-    let url = '/api/v2/organizations.json'
-    client.request(url).then(data => {
-      bus.$emit('results-fetched', data.organizations, 'organizations', url, 100, data.count, false)
+    client.request('/api/v2/organizations.json').then(data => {
+      format(data.organizations, 'organizations', this.columns).then(results => {
+        this.results = results
+        this.resultCount = data.count
+        this.perPage = 30
+      })
     }).catch(error => {
       console.log(error)
     })
-  },
-  updated () {
-    bus.$emit('columnToggled', this.columns.concat(this.customFields))
   },
   beforeCreate () {
     client.request('/api/v2/organization_fields.json').then((data) => {
@@ -130,5 +198,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

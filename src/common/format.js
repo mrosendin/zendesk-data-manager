@@ -1,0 +1,55 @@
+import config from './config.js'
+import Sideload from './sideload.js'
+
+export default function format (results, type, columns) {
+  console.log(`Formatting ${results.length} results.`)
+  return new Promise((resolve, reject) => {
+    // Basic formatting
+    results.forEach((result, index) => {
+      for (let key in result) {
+        if (key === 'id') {
+          let base = `https://${config.currentAccount.subdomain}.zendesk.com`
+          if (type === 'articles') result.url = `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
+          else if (type === 'organizations') result.url = `${base}/agent/organizations/${result.id}`
+          else if (type === 'tickets') result.url = `${base}/agent/tickets/${result.id}`
+          else if (type === 'users') result.url = `${base}/agent/users/${result.id}`
+          else result.url = `${base}/agent/admin/${type}/${result.id}`
+        }
+        if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
+        if (key === 'custom_fields') {
+          result[key].map(customField => {
+            result[`custom_field_${customField.id}`] = customField.value
+          })
+        }
+        if (['user_fields', 'organization_fields'].includes(key)) {
+          for (let fieldKey in result[key]) {
+            result[fieldKey] = result[key][fieldKey]
+          }
+        }
+        if (Array.isArray(result[key])) result[key] = result[key].join(', ')
+        if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
+      }
+    })
+
+    // Sideloading, if enabled
+    if (config.settings.sideloads && results.length) {
+      console.log("Sideloading enabled.")
+      let sideloadableColumns = []
+      for (let column of columns) {
+        if (column.selected && column.hasOwnProperty('sideload')) {
+          sideloadableColumns.push(column)
+        }
+      }
+      console.log("Starting Sideload.replaceIdsWithNames.")
+      Sideload.replaceIdsWithNames(results, sideloadableColumns).then(results => {
+        console.log("Resolving promise in processResults.")
+        resolve(results)
+      }).catch(error => {
+        console.log(error)
+        reject()
+      })
+    } else {
+      resolve(results)
+    }
+  })
+}

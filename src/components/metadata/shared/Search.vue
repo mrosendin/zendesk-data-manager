@@ -107,11 +107,6 @@ export default {
       order: ''
     }
   },
-  beforeDestroy () {
-    // TODO: May want to create a seprate event name for clearing out the
-    // search results when the route is changed.
-    bus.$emit('results-fetched', [])
-  },
   watch: {
     title: function (newTitle) {
       this.search()
@@ -123,9 +118,9 @@ export default {
         return new Promise((resolve, reject) => {
           let url = `/api/v2/${this.type}.json`
           client.request(url).then(data => {
-            bus.$emit('results-fetched', data[this.type], this.type, url, 30, data.count, true)
+            this.onFetch(data[this.type], data.count)
           }).catch(error => {
-            this.error = error.responseJSON.description
+            this.error = error
           })
         })
       }
@@ -136,16 +131,18 @@ export default {
       if (this.order) url += `&sort_order=${this.order}`
       client.request(url)
         .then((data) => {
-          let itemsPerPage = 30
-          bus.$emit('results-fetched', data[this.type], this.type, url, itemsPerPage, data.count)
+          this.onFetch(data[this.type], data.count)
         }).catch((error) => {
-          this.error = error.responseJSON.description
+          this.error = error
         })
     }, 300)
   },
   props: {
     type: {
       type: String
+    },
+    onFetch: {
+      type: Function
     }
   }
 }

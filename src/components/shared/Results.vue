@@ -1,24 +1,15 @@
 <template>
-  <div id="results" v-if="complete" class="box">
+  <div id="results" class="box">
 
     <div class="has-centered-text">
       <div class="content has-text-centered">
-        <h4 class="title is-4">Results: {{this.pagination.total}}</h4>
+        <h4 class="title is-4">Results: {{this.resultCount}}</h4>
       </div>
     </div>
 
-    <div class="columns">
+    <div class="columns" v-if="messages.error">
       <div class="column">
-        <div class="notification is-success" v-if="messages.success">
-          <button class="delete" @click="messages.success = ''"></button>
-            {{messages.success}}
-        </div>
-      </div>
-    </div>
-
-    <div class="columns">
-      <div class="column">
-        <div class="notification is-danger" v-if="messages.error">
+        <div class="notification is-danger" >
           <button class="delete" @click="messages.error = ''"></button>
             {{messages.error}}
         </div>
@@ -63,9 +54,9 @@
       </nav>
 
       <pagination
-        :current="pagination.current"
-        :total="pagination.total"
-        :itemsPerPage="pagination.itemsPerPage"
+        :current="currentPage"
+        :total="resultCount"
+        :itemsPerPage="perPage"
         :onChange="onChange">
       </pagination>
 
@@ -81,7 +72,7 @@
             <tr v-for="result in results">
               <td><input type="checkbox" v-model="selected" :value="result.id" number></td>
               <td v-for="column in columns" v-if="column.selected">
-                <template v-if="column.value === 'id' && type !== 'groups' && type !== 'group'">
+                <template v-if="column.value === 'id' && type !== 'groups'">
                   <a target="blank" :href="result.url" >{{result[column.value]}}</a>
                 </template>
                 <template v-else>{{result[column.value]}}</template>
@@ -92,9 +83,9 @@
       </div>
 
       <pagination
-        :current="pagination.current"
-        :total="pagination.total"
-        :itemsPerPage="pagination.itemsPerPage"
+        :current="currentPage"
+        :total="resultCount"
+        :itemsPerPage="perPage"
         :onChange="onChange">
       </pagination>
 
@@ -104,7 +95,7 @@
       :show="showDownloadModal"
       :onClose="() => showDownloadModal = false"
       :url="url">
-      </download-modal>
+    </download-modal>
 
   </div>
 </template>
@@ -116,41 +107,47 @@ import bus from '../../common/bus.js'
 import config from '../../common/config.js'
 import Sideload from '../../common/sideload.js'
 
-let pagination = {
-  current: 1,
-  total: 0,
-  itemsPerPage: 100
-}
-
 export default {
   name: 'results',
   props: {
     columns: {
       default: () => [],
       type: Array
+    },
+    results: {
+      default: () => [],
+      type: Array
+    },
+    type: {
+      type: String
+    },
+    resultCount: {
+      type: Number,
+      default: 0
+    },
+    perPage: {
+      type: Number,
+      default: 30
+    },
+    onDelete: {
+      type: Function
     }
   },
   data () {
     return {
-      results: [],
-      complete: false,
       selected: [],
       messages: {
-        success: '',
         error: ''
       },
       showDownloadModal: false,
       showWarningModal: false,
-      pagination: pagination,
+      currentPage: 1,
       url: '',
       isSearch: false
     }
   },
   components: { DownloadModal, Pagination },
   computed: {
-    count () {
-      return this.results.length
-    },
     selectAll: {
       get () {
         return this.results ? this.selected.length === this.results.length : false;
@@ -167,128 +164,16 @@ export default {
   },
   watch: {
     '$route' () {
-      this.complete = false
-      this.messages.success = ''
       this.messages.error = ''
     }
   },
   methods: {
-    buildUrl (result) {
-      let base = `https://${config.currentAccount.subdomain}.zendesk.com`
-      if (this.type === 'articles') return `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
-      if (this.type === 'organizations') return `${base}/agent/organizations/${result.id}`
-      if (this.type === 'tickets') return `${base}/agent/tickets/${result.id}`
-      if (this.type === 'users') return `${base}/agent/users/${result.id}`
-      return `${base}/agent/admin/${this.type}/${result.id}`
-    },
     deleteSelected () {
       mixpanel.track(`Deleting type: ${this.type}.`)
       this.showWarningModal = false
-      // Delete articles
-      if (this.type === 'article') {
-        let deleteSelectedPromise = new Promise((resolve, reject) => {
-          let count = 0
-          this.selected.forEach((id) => {
-            client.request({
-              url: `/api/v2/help_center/articles/${id}.json`,
-              method: 'DELETE'
-            }).then(() => {
-              count += 1
-              this.results = this.results.filter((result) => {
-                return result.id !== id
-              })
-              if (count === this.selected.length) {
-                if (count > 1) this.messages.success = `${count} articles have been archived.`
-                else this.messages.success = `${count} article has been archived.`
-                this.selected = []
-              }
-            })
-          })
-        })
-      } else if (this.type !== 'group') {
-        // Bulk deletions
-        if (this.type.substr(this.type.length-1) !== 's') this.type += 's'  // pluralize
-        let count = this.selected.length
-        this.selected.forEach((id) => {
-          client.request({
-            url: `/api/v2/${this.type}/destroy_many.json?ids=${this.selected.join(',')}`,
-            method: 'DELETE'
-          }).then(() => {
-            this.results = this.results.filter((result) => {
-              return !this.selected.includes(result.id)
-            })
-            if (count > 1) this.messages.success = `${count} ${this.type} have been deleted.`
-            else this.messages.success = `${count} ${this.type.slice(0, -1)} has been deleted.`
-            this.selected = []
-          })
-        })
-      } else {
-        // Single delete (group only)
-        let deleteSelectedPromise = new Promise((resolve, reject) => {
-          let count = 0
-          this.selected.forEach((id) => {
-            client.request({
-              url: `/api/v2/groups/${id}.json`,
-              method: 'DELETE'
-            }).then(() => {
-              count += 1
-              this.results = this.results.filter((result) => {
-                return result.id !== id
-              })
-              if (count === this.selected.length) {
-                if (count > 1) this.messages.success = `${count} groups have been deleted.`
-                else this.messages.success = `${count} group has been deleted.`
-                this.selected = []
-              }
-            })
-          })
-        })
-      }
-    },
-    format (results) {
-      console.log(`Formatting ${results.length} results.`)
-      return new Promise((resolve, reject) => {
-        // Basic formatting
-        results.forEach((result, index) => {
-          for (let key in result) {
-            if (key === 'id') result.url = this.buildUrl(result)
-            if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
-            if (key === 'custom_fields') {
-              result[key].map(customField => {
-                result[`custom_field_${customField.id}`] = customField.value
-              })
-            }
-            if (['user_fields', 'organization_fields'].includes(key)) {
-              for (let fieldKey in result[key]) {
-                result[fieldKey] = result[key][fieldKey]
-              }
-            }
-            if (Array.isArray(result[key])) result[key] = result[key].join(', ')
-            if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
-          }
-        })
 
-        // Sideloading, if enabled
-        if (config.settings.sideloads && results.length) {
-          console.log("Sideloading enabled.")
-          let sideloadableColumns = []
-          for (let column of this.columns) {
-            if (column.selected && column.hasOwnProperty('sideload')) {
-              sideloadableColumns.push(column)
-            }
-          }
-          console.log("Starting Sideload.replaceIdsWithNames.")
-          Sideload.replaceIdsWithNames(results, sideloadableColumns).then(results => {
-            console.log("Resolving promise in processResults.")
-            resolve(results)
-          }).catch(error => {
-            this.messages.error = error
-            reject()
-          })
-        } else {
-          resolve(results)
-        }
-      })
+      this.onDelete(this.selected)
+      this.selected = []
     },
     onChange (page) {
       mixpanel.track(`Fetching new page of results.`)
@@ -307,23 +192,6 @@ export default {
     toggleWarningModal () {
       this.showWarningModal = !this.showWarningModal
     }
-  },
-  created () {
-    bus.$on('results-fetched', (results, type, url = '', itemsPerPage = 30, total = null, search = false) => {
-      this.type = type
-      this.format(results).then(results => {
-        this.results = results
-        this.isSearch = search
-        this.url = url
-        this.complete = true
-        this.pagination.current = 1
-        this.pagination.itemsPerPage = itemsPerPage
-        this.pagination.total = total
-      })
-    })
-  },
-  beforeDestroy () {
-    bus.$off('results-fetched')
   }
 }
 </script>

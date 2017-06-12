@@ -170,7 +170,37 @@
       </div>
     </div>
 
-    <advanced-search type="ticket" :filters="filters"></advanced-search>
+    <advanced-search type="ticket" :filters="filters" :onFetch="onFetch"></advanced-search>
+
+    <div class="columns" v-if="messages.success">
+      <div class="column">
+        <div class="notification is-success">
+          <button class="delete" @click="messages.success = ''"></button>
+            {{messages.success}}
+        </div>
+      </div>
+    </div>
+
+    <div class="columns" v-if="messages.error">
+      <div class="column">
+        <div class="notification is-danger">
+          <button class="delete" @click="messages.error = ''"></button>
+            {{messages.error}}
+        </div>
+      </div>
+    </div>
+
+    <div class="columns results">
+      <div class="column">
+        <results :columns="columns.concat(this.customFields)"
+          :results="results"
+          type="tickets"
+          :resultCount="resultCount"
+          :perPage="perPage"
+          :onDelete="onDelete">
+        </results>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -182,15 +212,33 @@ import TicketTypeFilter from './filters/TicketTypeFilter.vue'
 import Typeahead from 'vue-bulma-typeahead'
 import ColumnSelection from '../shared/ColumnSelection.vue'
 import AdvancedSearch from './shared/AdvancedSearch.vue'
+import Results from '../shared/Results.vue'
 import bus from '../../common/bus.js'
 import columns from '../../common/columns.js'
+import format from '../../common/format.js'
 
 export default {
   name: 'tickets',
-  components: { StatusFilter, PriorityFilter, TicketTypeFilter, DateFilter, Typeahead, ColumnSelection, AdvancedSearch },
+  components: {
+    StatusFilter,
+    PriorityFilter,
+    TicketTypeFilter,
+    DateFilter,
+    Typeahead,
+    ColumnSelection,
+    AdvancedSearch,
+    Results
+  },
   data () {
     return {
       columns: columns.ticketColumns,
+      results: [],
+      resultCount: 0,
+      perPage: 30,
+      messages: {
+        success: '',
+        error: ''
+      },
       customFields: [],
       filters: {
         group: '',
@@ -214,6 +262,29 @@ export default {
     }
   },
   methods: {
+    onFetch (results, resultCount) {
+      format(results, 'tickets', this.columns).then(results => {
+        this.results = results
+        this.resultCount = resultCount
+        this.perPage = 100
+      })
+    },
+    onDelete (ids) {
+      let count = ids.length
+      ids.forEach((id) => {
+        client.request({
+          url: `/api/v2/tickets/destroy_many.json?ids=${ids.join(',')}`,
+          method: 'DELETE'
+        }).then(() => {
+          this.resultCount--
+          this.results = this.results.filter((result) => {
+            return !ids.includes(result.id)
+          })
+          if (count > 1) this.messages.success = `${count} tickets have been deleted.`
+          else this.messages.success = `${count} ticket has been deleted.`
+        })
+      })
+    },
     onChange (value, name) {
       this.filters[name] = value
 
@@ -241,15 +312,15 @@ export default {
     }
   },
   mounted () {
-    let url = '/api/v2/tickets.json'
-    client.request(url).then(data => {
-      bus.$emit('results-fetched', data.tickets, 'tickets', url, 100, data.count, false)
+    client.request('/api/v2/tickets.json').then(data => {
+      format(data.tickets, 'tickets', this.columns).then(results => {
+        this.results = results
+        this.resultCount = data.count
+        this.perPage = 30
+      })
     }).catch(error => {
       console.log(error)
     })
-  },
-  updated () {
-    bus.$emit('columnToggled', this.columns.concat(this.customFields))
   },
   beforeCreate () {
     let defaultFields = ['subject', 'description', 'status', 'tickettype', 'priority', 'group', 'assignee'];

@@ -170,8 +170,7 @@ export default {
       if (this.order) url += `&sort_order=${this.order}`
       client.request(url)
         .then((data) => {
-          let itemsPerPage = 100
-          bus.$emit('results-fetched', data.results, this.type, url, itemsPerPage, data.count, true)
+          this.onFetch(data.results, data.count)
         }).catch((error) => {
           this.error = error.responseJSON.description
         })
@@ -184,6 +183,9 @@ export default {
     filters: {
       type: Object,
       default: () => {}
+    },
+    onFetch: {
+      type: Function
     }
   }
 }
