@@ -10,24 +10,18 @@
 
 <script>
 import AppHeader from './components/shared/AppHeader.vue'
-import Results from './components/shared/Results.vue'
 import AppFooter from './components/shared/AppFooter.vue'
-import bus from './common/bus.js'
 import config from './common/config.js'
 
 export default {
   name: 'app',
-  components: { AppHeader, Results, AppFooter },
-  data () {
-    return {
-      columns: [],
-      menuOpen: false
-    }
+  components: {
+    AppHeader,
+    AppFooter
   },
   watch: {
     '$route' () {
       mixpanel.track(`Route changed to ${this.$route.path}.`)
-      this.columns = []
     }
   },
   created () {
@@ -73,10 +67,6 @@ export default {
           }
         })
       })
-    })
-
-    bus.$on('columnToggled', (columns) => {
-      this.columns = columns
     })
   }
 }

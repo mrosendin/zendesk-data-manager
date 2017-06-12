@@ -103,7 +103,6 @@
 <script>
 import DownloadModal from './DownloadModal.vue'
 import Pagination from 'vue-2-bulma-pagination'
-import bus from '../../common/bus.js'
 import config from '../../common/config.js'
 import Sideload from '../../common/sideload.js'
 

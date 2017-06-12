@@ -156,11 +156,6 @@ export default {
       this.role = `role:${role}`
     })
   },
-  beforeDestroy () {
-    // TODO: May want to create a seprate event name for clearing out the
-    // search results when the route is changed.
-    bus.$emit('results-fetched', [])
-  },
   methods: {
     search () {
       mixpanel.track(`Searching for ${this.type}`)
@@ -168,12 +163,11 @@ export default {
       let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`
       if (this.order) url += `&sort_order=${this.order}`
-      client.request(url)
-        .then((data) => {
-          this.onFetch(data.results, data.count)
-        }).catch((error) => {
-          this.error = error.responseJSON.description
-        })
+      client.request(url).then((data) => {
+        this.onFetch(data.results, data.count)
+      }).catch((error) => {
+        this.error = error.responseJSON.description
+      })
     }
   },
   props: {

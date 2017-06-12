@@ -95,8 +95,6 @@
 </template>
 
 <script>
-import bus from '../../../common/bus.js'
-
 export default {
   name: 'search',
   data () {
@@ -129,12 +127,11 @@ export default {
       let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`
       if (this.order) url += `&sort_order=${this.order}`
-      client.request(url)
-        .then((data) => {
-          this.onFetch(data[this.type], data.count)
-        }).catch((error) => {
-          this.error = error
-        })
+      client.request(url).then((data) => {
+        this.onFetch(data[this.type], data.count)
+      }).catch((error) => {
+        this.error = error
+      })
     }, 300)
   },
   props: {
