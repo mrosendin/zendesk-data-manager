@@ -31,6 +31,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "lodash.debounce": "^4.0.8",
     "vue-2-bulma-pagination": "^0.0.6",
     "vue-bulma-typeahead": "0.0.4",
