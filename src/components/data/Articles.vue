@@ -108,7 +108,9 @@ export default {
     }
   },
   mounted () {
-    client.request('/api/v2/help_center/articles.json').then(data => {
+    let url = '/api/v2/help_center/articles.json'
+    bus.$emit('url', url)
+    client.request(url).then(data => {
       format(data.articles, 'articles', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count

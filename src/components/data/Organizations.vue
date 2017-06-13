@@ -173,7 +173,9 @@ export default {
     }
   },
   mounted () {
-    client.request('/api/v2/organizations.json').then(data => {
+    let url = '/api/v2/organizations.json'
+    bus.$emit('url', url)
+    client.request(url).then(data => {
       format(data.organizations, 'organizations', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count

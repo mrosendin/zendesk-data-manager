@@ -127,6 +127,7 @@ export default {
       let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`
       if (this.order) url += `&sort_order=${this.order}`
+      bus.$emit('url', url)
       client.request(url).then((data) => {
         this.onFetch(data[this.type], data.count)
       }).catch((error) => {

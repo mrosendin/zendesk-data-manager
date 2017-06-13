@@ -99,7 +99,9 @@ export default {
     },
   },
   mounted () {
-    client.request('/api/v2/views.json').then(data => {
+    let url = '/api/v2/views.json'
+    bus.$emit('url', url)
+    client.request(url).then(data => {
       format(data.views, 'views', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count

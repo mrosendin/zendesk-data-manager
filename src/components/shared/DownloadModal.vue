@@ -97,20 +97,24 @@ export default {
       }
 
       this.inProgress = true
-      // get email/token, encrypt, create request and send as header
 
+      let data = {
+        filename: this.filename,
+        url: `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
+      }
 
       // send the search url with parameters as body
       axios({
         method: 'post',
         url: 'http://localhost:3000/api/data-manager/export',
-        data: {
-          filename: this.filename
+        data: data,
+        headers: {
+          'Email': config.currentUser.email,
+          'Authorization-Token': localStorage.getItem('DataManagerToken')
         }
       }).then(response => {
         let id = response.data.id
         let poll = setInterval(() => {
-          console.log(`Retrieving status for job id ${id}`)
           axios(`http://localhost:3000/api/data-manager/statuses/${id}`).then(response => {
             this.progress = response.data.progress
             if (this.progress === 100) {
@@ -127,10 +131,6 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-
-      // poll the status endpoint and update progress bar
-
-
     },
     cancel () {
       this.inProgress = false

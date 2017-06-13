@@ -312,7 +312,9 @@ export default {
     }
   },
   mounted () {
-    client.request('/api/v2/tickets.json').then(data => {
+    let url = '/api/v2/tickets.json'
+    bus.$emit('url', url)
+    client.request(url).then(data => {
       format(data.tickets, 'tickets', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count

@@ -75,7 +75,12 @@ import format from '../../common/format.js'
 
 export default {
   name: 'groups',
-  components: { DateFilter, ColumnSelection, Results, AdvancedSearch },
+  components: {
+    DateFilter,
+    ColumnSelection,
+    Results,
+    AdvancedSearch
+  },
   data () {
     return {
       columns: columns.groupColumns,
@@ -122,7 +127,9 @@ export default {
     }
   },
   mounted () {
-    client.request('/api/v2/groups.json').then(data => {
+    let url = '/api/v2/groups.json'
+    bus.$emit('url', url)
+    client.request(url).then(data => {
       format(data.groups, 'groups', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count
