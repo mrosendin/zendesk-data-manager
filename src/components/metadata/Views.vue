@@ -38,7 +38,8 @@
           type="views"
           :resultCount="resultCount"
           :perPage="perPage"
-          :onDelete="onDelete">
+          :onDelete="onDelete"
+          :onResultsChange="onResultsChange">
         </results>
       </div>
     </div>
@@ -97,6 +98,11 @@ export default {
         })
       })
     },
+    onResultsChange (results) {
+      format(results, 'views', this.columns).then(results => {
+        this.results = results
+      })
+    }
   },
   mounted () {
     let url = '/api/v2/views.json'

@@ -57,7 +57,7 @@
         :current="currentPage"
         :total="resultCount"
         :itemsPerPage="perPage"
-        :onChange="onChange">
+        :onChange="onPageChange">
       </pagination>
 
       <div id="table-scroll">
@@ -86,7 +86,7 @@
         :current="currentPage"
         :total="resultCount"
         :itemsPerPage="perPage"
-        :onChange="onChange">
+        :onChange="onPageChange">
       </pagination>
 
     </div>
@@ -130,6 +130,9 @@ export default {
       default: 30
     },
     onDelete: {
+      type: Function
+    },
+    onResultsChange: {
       type: Function
     }
   },
@@ -175,16 +178,16 @@ export default {
       this.onDelete(this.selected)
       this.selected = []
     },
-    onChange (page) {
+    onPageChange (page) {
       mixpanel.track(`Fetching new page of results.`)
       let url = this.url + (this.isSearch ? `&page=${page}` : `?page=${page}`)
       client.request({
         type: 'GET',
         url: url
       }).then(data => {
-        if (data.hasOwnProperty(this.type)) this.results = data[this.type]
-        else this.results = data.results
-        this.pagination.current = page
+        this.currentPage = page
+        if (data.hasOwnProperty(this.type)) this.onResultsChange(data[this.type])
+        else this.onResultsChange(data.results)
       }).catch(error => {
         this.messages.error = error
       })

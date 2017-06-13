@@ -87,7 +87,8 @@
           type="organizations"
           :resultCount="resultCount"
           :perPage="perPage"
-          :onDelete="onDelete">
+          :onDelete="onDelete"
+          :onResultsChange="onResultsChange">
         </results>
       </div>
     </div>
@@ -157,6 +158,11 @@ export default {
           if (count > 1) this.messages.success = `${count} organizations have been deleted.`
           else this.messages.success = `${count} organization has been deleted.`
         })
+      })
+    },
+    onResultsChange (results) {
+      format(results, 'organizations', this.columns).then(results => {
+        this.results = results
       })
     },
     onChange (value, name) {

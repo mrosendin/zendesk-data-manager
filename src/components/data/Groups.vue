@@ -57,7 +57,8 @@
           type="groups"
           :resultCount="resultCount"
           :perPage="perPage"
-          :onDelete="onDelete">
+          :onDelete="onDelete"
+          :onResultsChange="onResultsChange">
         </results>
       </div>
     </div>
@@ -123,6 +124,13 @@ export default {
             }
           })
         })
+      })
+    },
+    onResultsChange (results) {
+      format(results, 'groups', this.columns).then(results => {
+        this.results = results
+      }).catch(error => {
+        console.log(error)
       })
     }
   },

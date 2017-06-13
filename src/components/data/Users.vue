@@ -126,7 +126,8 @@
           type="users"
           :resultCount="resultCount"
           :perPage="perPage"
-          :onDelete="onDelete">
+          :onDelete="onDelete"
+          :onResultsChange="onResultsChange">
         </results>
       </div>
     </div>
@@ -204,6 +205,11 @@ export default {
           if (count > 1) this.messages.success = `${count} users have been deleted.`
           else this.messages.success = `${count} user has been deleted.`
         })
+      })
+    },
+    onResultsChange (results) {
+      format(results, 'users', this.columns).then(results => {
+        this.results = results
       })
     },
     onChange (value, name) {

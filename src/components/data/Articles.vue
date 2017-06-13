@@ -46,7 +46,8 @@
           type="articles"
           :resultCount="resultCount"
           :perPage="perPage"
-          :onDelete="onDelete">
+          :onDelete="onDelete"
+          :onResultsChange="onResultsChange">
         </results>
       </div>
     </div>
@@ -104,6 +105,11 @@ export default {
             }
           })
         })
+      })
+    },
+    onResultsChange (results) {
+      format(results, 'articles', this.columns).then(results => {
+        this.results = results
       })
     }
   },
