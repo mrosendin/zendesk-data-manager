@@ -48,7 +48,7 @@
           </div>
           <div class="columns" v-if="inProgress">
             <div class="column has-text-centered">
-              <p>Please wait for the file processing to complete.</p>
+              <p class="is-small">Please wait for the file processing to complete.</p>
               <progress class="progress is-success" :value="progress" max="100">{{ progress }}%</progress>
             </div>
           </div>
@@ -111,12 +111,15 @@ export default {
         let id = response.data.id
         let poll = setInterval(() => {
           console.log(`Retrieving status for job id ${id}`)
-          axios({
-            method: 'get',
-            url: `http://localhost:3000/api/data-manager/export/${id}`
-          }).then(response => {
+          axios(`http://localhost:3000/api/data-manager/statuses/${id}`).then(response => {
             this.progress = response.data.progress
-            if (this.progress === 100) clearInterval(poll)
+            if (this.progress === 100) {
+              clearInterval(poll)
+              this.inProgress = false
+              this.progress = 0
+              this.onClose()
+              window.open(`http://localhost:3000/api/data-manager/download/${id}`)
+            }
           }).catch(error => {
             console.log(error)
           })
