@@ -71,7 +71,7 @@ export default {
       columns: columns.articleColumns,
       results: [],
       resultCount: 0,
-      perPage: 30,
+      perPage: 100,
       messages: {
         success: '',
         error: ''
@@ -120,7 +120,7 @@ export default {
       format(data.articles, 'articles', this.columns).then(results => {
         this.results = results
         this.resultCount = data.count
-        this.perPage = 30
+        this.perPage = 100
       })
     }).catch(error => {
       console.log(error)

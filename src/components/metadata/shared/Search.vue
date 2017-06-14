@@ -12,6 +12,7 @@
               <div class="field">
                 <div class="select is-fullwidth">
                   <select v-model="active">
+                    <option></option>
                     <option value="true">True</option>
                     <option value="false">False</option>
                   </select>
@@ -129,6 +130,7 @@ export default {
       let url = `/api/v2/${this.type}/search.json?query=${encodeURIComponent(this.title)}`
       if (this.sortBy) url += `&sort_by=${this.sortBy}`
       if (this.order) url += `&sort_order=${this.order}`
+      if (this.active) url += `&active=${this.active}`
       bus.$emit('url', url)
       client.request(url).then((data) => {
         this.onFetch(data[this.type], data.count)
