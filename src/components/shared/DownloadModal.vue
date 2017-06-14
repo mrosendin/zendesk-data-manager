@@ -103,14 +103,12 @@ export default {
         url: `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
       }
 
-      // send the search url with parameters as body
       axios({
         method: 'post',
         url: 'http://localhost:3000/api/data-manager/export',
         data: data,
         headers: {
-          'Email': config.currentUser.email,
-          'Authorization-Token': localStorage.getItem('DataManagerToken')
+          'Authorization': `${config.currentUser.email}/token:${localStorage.getItem('DataManagerToken')}`
         }
       }).then(response => {
         let id = response.data.id
