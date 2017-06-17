@@ -48,8 +48,8 @@
           </div>
           <div class="columns" v-if="inProgress">
             <div class="column has-text-centered">
-              <p class="is-small">Please wait for the file processing to complete.</p>
-              <progress class="progress is-success" :value="progress" max="100">{{ progress }}%</progress>
+              <p class="is-small">{{ progress }}% done. Please wait for the file processing to complete.</p>
+              <progress class="progress is-success" :value="progress" max="100"></progress>
             </div>
           </div>
         </section>
@@ -105,34 +105,37 @@ export default {
       let url = `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
 
       client.request(url).then(data => {
-        let totalPages = Math.ceil(data.count/100);
+        let perPage = Object.keys(data).includes('articles') ? 30 : 100
+        let totalPages = Math.ceil(data.count/perPage)
         let currentPage = 1
-        this.progress = (currentPage/totalPages).toFixed(2)*100;
+        this.progress = ((currentPage/totalPages)*100).toPrecision(3)
 
-        format(data[Object.keys(data)[0]], null, this.columns).then(results => {
+        format(data[this.getKey(Object.keys(data))], null, this.columns).then(results => {
           this.extend(results, data.next_page, totalPages, currentPage, results => {
-            let filename, link, data;
+            let filename, link, data
 
             switch (this.fileType) {
               case 'csv':
-                filename = this.filename + '.csv';
-                data = encodeURI('data:text/csv;charset=utf-8,' + this.convertToCSV(results));
-                break;
+                filename = this.filename + '.csv'
+                data = encodeURI('data:text/csv;charset=utf-8,' + this.convertToCSV(results))
+                break
               case 'json':
-                filename = this.filename + '.json';
-                data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(results));
-                break;
+                filename = this.filename + '.json'
+                data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(results))
+                break
               case 'xml':
-                filename = this.filename + '.xml';
-                let x2js = new X2JS();
-                data = encodeURI("data:text/xml;charset=utf-8," + x2js.json2xml_str(results));
-                break;
+                filename = this.filename + '.xml'
+                let x2js = new X2JS()
+                data = encodeURI("data:text/xml;charset=utf-8," + x2js.json2xml_str(results))
+                break
             }
-            link = document.createElement('a');
-            link.setAttribute('href', data);
-            link.setAttribute('download', filename);
-            link.click();
-            this.inProgress = false;
+            link = document.createElement('a')
+            link.setAttribute('href', data)
+            link.setAttribute('download', filename)
+            link.click()
+            this.progress = 0
+            this.inProgress = false
+            this.onClose()
           })
         })
       })
@@ -182,15 +185,22 @@ export default {
       if (nextPage != null) {
         client.request(nextPage).then((data) => {
           currentPage += 1;
-          format(data[Object.keys(data)[0]], null, this.columns).then(newResults => {
+          format(data[this.getKey(Object.keys(data))], null, this.columns).then(newResults => {
             results = results.concat(newResults);
-            this.progress = (currentPage/totalPages).toPrecision(3)*100
-            this.extend(results, data.next_page, totalPages, currentPage++, callback);
+            this.progress = ((currentPage/totalPages)*100).toPrecision(3)
+            this.extend(results, data.next_page, totalPages, currentPage++, callback)
           });
         });
       } else {
         callback(results);
       }
+    },
+    getKey (keys) {
+      let validKeys = ['articles', 'tickets', 'users', 'organizations', 'groups', 'users', 'results', 'views', 'automations', 'triggers', 'macros']
+      let key = keys.find(key => {
+        return validKeys.includes(key)
+      })
+      return key
     }
   },
   computed: {
