@@ -94,7 +94,8 @@
     <download-modal
       :show="showDownloadModal"
       :onClose="() => showDownloadModal = false"
-      :url="url">
+      :url="url"
+      :columns="columns">
     </download-modal>
 
   </div>

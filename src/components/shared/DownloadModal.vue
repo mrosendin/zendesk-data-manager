@@ -65,6 +65,7 @@
 <script>
 import axios from 'axios'
 import config from '../../common/config.js'
+import format from '../../common/format.js'
 
 export default {
   name: 'download-modal',
@@ -78,6 +79,9 @@ export default {
     },
     url: {
       type: String
+    },
+    columns: {
+      type: Array
     }
   },
   data () {
@@ -98,41 +102,95 @@ export default {
 
       this.inProgress = true
 
-      let data = {
-        filename: this.filename,
-        url: `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
-      }
+      let url = `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
 
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/api/data-manager/export',
-        data: data,
-        headers: {
-          'Authorization': `${config.currentUser.email}/token:${localStorage.getItem('DataManagerToken')}`
-        }
-      }).then(response => {
-        let id = response.data.id
-        let poll = setInterval(() => {
-          axios(`http://localhost:3000/api/data-manager/statuses/${id}`).then(response => {
-            this.progress = response.data.progress
-            if (this.progress === 100) {
-              clearInterval(poll)
-              this.inProgress = false
-              this.progress = 0
-              this.onClose()
-              window.open(`http://localhost:3000/api/data-manager/download/${id}`)
+      client.request(url).then(data => {
+        let totalPages = Math.ceil(data.count/100);
+        let currentPage = 1
+        this.progress = (currentPage/totalPages).toFixed(2)*100;
+
+        format(data[Object.keys(data)[0]], null, this.columns).then(results => {
+          this.extend(results, data.next_page, totalPages, currentPage, results => {
+            let filename, link, data;
+
+            switch (this.fileType) {
+              case 'csv':
+                filename = this.filename + '.csv';
+                data = encodeURI('data:text/csv;charset=utf-8,' + this.convertToCSV(results));
+                break;
+              case 'json':
+                filename = this.filename + '.json';
+                data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(results));
+                break;
+              case 'xml':
+                filename = this.filename + '.xml';
+                let x2js = new X2JS();
+                data = encodeURI("data:text/xml;charset=utf-8," + x2js.json2xml_str(results));
+                break;
             }
-          }).catch(error => {
-            console.log(error)
+            link = document.createElement('a');
+            link.setAttribute('href', data);
+            link.setAttribute('download', filename);
+            link.click();
+            this.inProgress = false;
           })
-        }, 500)
-      }).catch(error => {
-        console.log(error)
+        })
       })
     },
     cancel () {
       this.inProgress = false
       this.onClose()
+    },
+    convertToCSV (results) {
+      let result, counter
+      let keys = []
+      let header = []
+
+      if (results == null || !results.length) {
+        new Error('The results passed into convertToCSV are null or 0 length.')
+      }
+
+      this.columns.forEach(column => {
+        if (column.selected) {
+          header.push(column.name)
+          keys.push(column.value)
+        }
+      })
+
+      result = ''
+      result += header.join(',')
+      result += '\n'
+
+      results.forEach(r => {
+        counter = 0
+        keys.forEach(key => {
+          if (counter > 0) result += ','
+          if (r[key]) {
+            if (typeof r[key] == 'string') {
+              r[key] = r[key].replace(/"/g, '""')  // Escape commas and quotes
+              if (r[key].search(/("|,|\n)/g) >= 0) r[key] = '"' + r[key] + '"'
+            }
+            result += r[key];
+          }
+          counter++;
+        })
+        result += '\n'
+      })
+      return result
+    },
+    extend (results, nextPage, totalPages, currentPage, callback) {
+      if (nextPage != null) {
+        client.request(nextPage).then((data) => {
+          currentPage += 1;
+          format(data[Object.keys(data)[0]], null, this.columns).then(newResults => {
+            results = results.concat(newResults);
+            this.progress = (currentPage/totalPages).toPrecision(3)*100
+            this.extend(results, data.next_page, totalPages, currentPage++, callback);
+          });
+        });
+      } else {
+        callback(results);
+      }
     }
   },
   computed: {

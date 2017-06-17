@@ -7,13 +7,15 @@ export default function format (results, type, columns) {
     // Basic formatting
     results.forEach((result, index) => {
       for (let key in result) {
-        if (key === 'id') {
-          let base = `https://${config.currentAccount.subdomain}.zendesk.com`
-          if (type === 'articles') result.url = `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
-          else if (type === 'organizations') result.url = `${base}/agent/organizations/${result.id}`
-          else if (type === 'tickets') result.url = `${base}/agent/tickets/${result.id}`
-          else if (type === 'users') result.url = `${base}/agent/users/${result.id}`
-          else result.url = `${base}/agent/admin/${type}/${result.id}`
+        if (type !== null) {
+          if (key === 'id') {
+            let base = `https://${config.currentAccount.subdomain}.zendesk.com`
+            if (type === 'articles') result.url = `${base}/hc/articles/${result.id}-${result.title.split(' ').join('-')}`
+            else if (type === 'organizations') result.url = `${base}/agent/organizations/${result.id}`
+            else if (type === 'tickets') result.url = `${base}/agent/tickets/${result.id}`
+            else if (type === 'users') result.url = `${base}/agent/users/${result.id}`
+            else result.url = `${base}/agent/admin/${type}/${result.id}`
+          }
         }
         if (['actions', 'restriction', 'execution', 'conditions'].includes(key)) result[key] = JSON.stringify(result[key])  // format array of objects
         if (key === 'custom_fields') {
