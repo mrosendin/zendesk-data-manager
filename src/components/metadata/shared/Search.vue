@@ -103,13 +103,22 @@ export default {
   data () {
     return {
       title: '',
-      active: true,
+      active: '',
       sortBy: '',
       order: ''
     }
   },
   watch: {
-    title: function (newTitle) {
+    title: function () {
+      this.search()
+    },
+    active: function () {
+      this.search()
+    },
+    sortBy: function () {
+      this.search()
+    },
+    order: function () {
       this.search()
     }
   },
