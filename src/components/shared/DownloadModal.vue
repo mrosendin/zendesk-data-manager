@@ -132,7 +132,9 @@ export default {
             link = document.createElement('a')
             link.setAttribute('href', data)
             link.setAttribute('download', filename)
+            document.body.appendChild(link)
             link.click()
+            document.body.removeChild(link)
             this.progress = 0
             this.inProgress = false
             this.onClose()
