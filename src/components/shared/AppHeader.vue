@@ -8,10 +8,10 @@
         <nav class="tabs is-centered is-boxed">
           <div class="container">
             <ul>
-              <router-link to="/data" tag="li" active-class="is-active"><a href="#">Data</a></router-link>
-              <router-link to="/metadata" tag="li" active-class="is-active"><a href="#">Metadata</a></router-link>
-              <router-link to="/import" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link>
-              <router-link to="/documentation" tag="li" active-class="is-active"><a href="#"><i class="fa fa-book"></i>&nbsp;Documentation</a></router-link>
+              <router-link to="/data" tag="li" active-class="is-active"><a href="#"><i class="fa fa-database"></i>&nbsp;Data</a></router-link>
+              <router-link to="/metadata" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cubes"></i>&nbsp;Metadata</a></router-link>
+              <!-- <router-link to="/import" tag="li" active-class="is-active"><a href="#"><i class="fa fa-cloud-upload"></i>&nbsp;Import</a></router-link> -->
+              <router-link to="/documentation" tag="li" active-class="is-active"><a href="#"><i class="fa fa-book"></i>&nbsp;Docs</a></router-link>
             </ul>
           </div>
         </nav>
@@ -25,7 +25,7 @@
             <router-link to="/data/users" class="nav-item is-tab" active-class="is-active">Users</router-link>
             <router-link to="/data/organizations" class="nav-item is-tab" active-class="is-active">Organizations</router-link>
             <router-link to="/data/groups" class="nav-item is-tab" active-class="is-active">Groups</router-link>
-            <router-link to="/data/articles" class="nav-item is-tab" active-class="is-active">Articles</router-link>
+            <!-- <router-link to="/data/articles" class="nav-item is-tab" active-class="is-active">Articles</router-link> -->
           </template>
 
           <template v-if="$route.path.indexOf('metadata') > -1">

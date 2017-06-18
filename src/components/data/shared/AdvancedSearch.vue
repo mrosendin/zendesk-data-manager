@@ -128,7 +128,7 @@ export default {
       if (this.ticketType) result.push(`${this.ticketType}`)
       if (this.role) result.push(`${this.role}`)
       for (var key in this.filters) {
-        if (this.filters[key]) result.push(`${key}:"${this.filters[key]}"`);
+        if (this.filters[key]) result.push(`${key}:${this.filters[key]}`);
       }
       result = `${result.join(' ')}`
       return result

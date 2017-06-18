@@ -120,7 +120,6 @@
               <div class="select is-fullwidth">
                 <select v-model="filters.via">
                   <option></option>
-                  <option></option>
                   <option value="mail">E-Mail</option>
                   <option value="get_satisfaction">Get Satisfaction</option>
                   <option value="dropbox">Dropbox</option>
