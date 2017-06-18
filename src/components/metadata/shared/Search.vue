@@ -127,6 +127,15 @@ export default {
       if (!this.title) {
         return new Promise((resolve, reject) => {
           let url = `/api/v2/${this.type}.json`
+          let ampersand = false
+          if (this.sortBy || this.order || this.active) {
+            url += '?'
+            ampersand = true
+          }
+          if (this.sortBy) url += `sort_by=${this.sortBy}`
+          if (this.order) url += `${ampersand ? '&' : ''}sort_order=${this.order}`
+          if (this.active) url += `${ampersand ? '&' : ''}active=${this.active}`
+          console.log(url)
           client.request(url).then(data => {
             this.onFetch(data[this.type], data.count)
           }).catch(error => {
