@@ -32,7 +32,8 @@
         </div>
 
         <div class="field">
-          <p class="control is-expanded has-icons-left">
+          <datepicker wrapper-class="control is-expanded" @selected="onDefaultDatepickerSelected" input-class="input" placeholder="Choose a date" v-if="!useDefault"></datepicker>
+          <p class="control is-expanded has-icons-left" v-if="useDefault">
             <input class="input" type="date" @change="update('value', $event.target.value)">
             <span class="icon is-small is-left">
               <i class="fa fa-calendar"></i>
@@ -47,22 +48,36 @@
 
 <script>
 import bus from '../../../common/bus.js'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   name: 'date-filter',
+  components: { Datepicker },
   data () {
     return {
       date: {
         type: '',
         operator: '',
         value: ''
-      }
+      },
+      useDefault: true
     }
   },
   methods: {
     update (key, value) {
       this.date[key] = value
       bus.$emit('dateChanged', this.date)
+    },
+    onDefaultDatepickerSelected (date) {
+      date = date.toISOString().split('T')[0]
+      this.date.value = date
+      bus.$emit('dateChanged', this.date)
+    }
+  },
+  created () {
+    // Detect missing browser features and update as necessary
+    if (!Modernizr.inputtypes.date) {
+      this.useDefault = false
     }
   }
 }
