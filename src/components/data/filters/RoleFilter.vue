@@ -47,4 +47,7 @@ export default {
 .field-label {
   text-align: left;
 }
+#role-filter {
+  width: 200px;
+}
 </style>

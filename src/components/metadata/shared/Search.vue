@@ -175,4 +175,13 @@ export default {
 .field-label {
   text-align: left;
 }
+#active {
+  width: 150px;
+}
+#sortBy, #order {
+  width: 200px;
+}
+#search {
+  width: 250px;
+}
 </style>

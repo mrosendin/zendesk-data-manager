@@ -187,8 +187,13 @@ export default {
 </script>
 
 <style scoped>
-#sortBy, #order, #keywords, #search {
+#sortBy, #order, #search {
   border: none !important;
+  width: 150px;
+}
+#keywords {
+  border: none !important;
+  width: 250px;
 }
 .field-label {
   text-align: left;

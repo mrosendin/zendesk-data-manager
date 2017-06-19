@@ -48,4 +48,7 @@ export default {
 .field-label {
   text-align: left;
 }
+#ticket-type-filter {
+  width: 145px;
+}
 </style>

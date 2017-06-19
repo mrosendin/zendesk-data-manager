@@ -64,4 +64,7 @@ export default {
 .field-label {
   text-align: left;
 }
+#priority-filter {
+  width: 200px;
+}
 </style>

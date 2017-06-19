@@ -87,4 +87,7 @@ export default {
 .field-label {
   text-align: left;
 }
+#date-filter {
+  width: 430px;
+}
 </style>

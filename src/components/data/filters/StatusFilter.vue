@@ -66,4 +66,7 @@ export default {
 .field-label {
   text-align: left;
 }
+#status-filter {
+  width: 200px;
+}
 </style>

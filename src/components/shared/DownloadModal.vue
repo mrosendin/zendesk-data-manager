@@ -112,29 +112,44 @@ export default {
 
         format(data[this.getKey(Object.keys(data))], null, this.columns).then(results => {
           this.extend(results, data.next_page, totalPages, currentPage, results => {
-            let filename, link, data
+            let filename, link, data, mimeType
 
             switch (this.fileType) {
               case 'csv':
                 filename = this.filename + '.csv'
-                data = encodeURI('data:text/csv;charset=utf-8,' + this.convertToCSV(results))
+                mimeType = "text/csv"
+                data = this.convertToCSV(results)
                 break
               case 'json':
                 filename = this.filename + '.json'
-                data = encodeURI("data:text/json;charset=utf-8," + JSON.stringify(results))
+                mimeType = "text/json"
+                data = JSON.stringify(results)
                 break
               case 'xml':
                 filename = this.filename + '.xml'
+                mimeType = "text/xml"
                 let x2js = new X2JS()
-                data = encodeURI("data:text/xml;charset=utf-8," + x2js.json2xml_str(results))
+                data = x2js.json2xml_str(results)
                 break
             }
-            link = document.createElement('a')
-            link.setAttribute('href', data)
-            link.setAttribute('download', filename)
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+            if (window.Blob && window.navigator.msSaveOrOpenBlob) {
+              let ab = new ArrayBuffer(data.length)
+              let ia = new Uint8Array(ab)
+              for (let i = 0; i < data.length; i++) {
+                ia[i] = data.charCodeAt(i);
+              }
+              let blobObject = new Blob([ab], { type: mimeType })
+              console.log(blobObject)
+              window.navigator.msSaveOrOpenBlob(blobObject, filename)
+            } else if (document.createElement('a').download !== undefined) {
+              data = encodeURI('data:text/csv;charset=utf-8,' + data)
+              link = document.createElement('a')
+              link.setAttribute('href', data)
+              link.setAttribute('download', filename)
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+            }
             this.progress = 0
             this.inProgress = false
             this.onClose()
