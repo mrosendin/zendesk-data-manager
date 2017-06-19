@@ -64,6 +64,9 @@
         </div>
 
         <div id="search">
+          <div class="field-label">
+            <label class="label">&nbsp;</label>
+          </div>
           <div class="field is-horizontal">
             <div class="field-body">
               <div class="field is-narrow">

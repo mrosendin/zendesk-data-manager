@@ -139,7 +139,6 @@ export default {
                 ia[i] = data.charCodeAt(i);
               }
               let blobObject = new Blob([ab], { type: mimeType })
-              console.log(blobObject)
               window.navigator.msSaveOrOpenBlob(blobObject, filename)
             } else if (document.createElement('a').download !== undefined) {
               data = encodeURI('data:text/csv;charset=utf-8,' + data)
