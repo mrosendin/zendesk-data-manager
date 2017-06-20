@@ -105,13 +105,12 @@ export default {
       let url = `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
 
       client.request(url).then(data => {
-        let perPage = Object.keys(data).includes('articles') ? 30 : 100
-        let totalPages = Math.ceil(data.count/perPage)
+        this.perPage = Object.keys(data).includes('articles') ? 30 : 100
         let currentPage = 1
-        this.progress = ((currentPage/totalPages)*100).toPrecision(3)
+        this.progress = ((currentPage/Math.ceil(data.count/this.perPage))*100).toPrecision(3)
 
         format(data[this.getKey(Object.keys(data))], null, this.columns).then(results => {
-          this.extend(results, data.next_page, totalPages, currentPage, results => {
+          this.extend(results, data.next_page, Math.ceil(data.count/this.perPage), currentPage, results => {
             let filename, link, data, mimeType
 
             switch (this.fileType) {
@@ -203,7 +202,7 @@ export default {
           currentPage += 1;
           format(data[this.getKey(Object.keys(data))], null, this.columns).then(newResults => {
             results = results.concat(newResults);
-            this.progress = ((currentPage/totalPages)*100).toPrecision(3)
+            this.progress = ((currentPage/Math.ceil(data.count/this.perPage))*100).toPrecision(3)
             this.extend(results, data.next_page, totalPages, currentPage++, callback)
           });
         });
