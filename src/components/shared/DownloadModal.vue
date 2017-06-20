@@ -231,4 +231,9 @@ export default {
 .pull-right {
   justify-content: flex-end;
 }
+@media screen and (min-width: 769px) {
+  .modal-content, .modal-card {
+    margin: 0 20px !important;
+  }
+}
 </style>
