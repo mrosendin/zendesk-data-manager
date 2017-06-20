@@ -50,6 +50,7 @@ export default function format (results, type, columns) {
             result[`custom_field_${customField.id}`] = customField.value
           })
         }
+        if (key === 'via') result.channel = result.via.channel
         if (['user_fields', 'organization_fields'].includes(key)) {
           for (let fieldKey in result[key]) {
             result[fieldKey] = result[key][fieldKey]
