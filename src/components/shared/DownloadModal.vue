@@ -198,7 +198,7 @@ export default {
       return result
     },
     extend (results, nextPage, totalPages, currentPage, callback) {
-      if (nextPage != null) {
+      if (nextPage != null && this.inProgress) {
         client.request(nextPage).then((data) => {
           currentPage += 1;
           format(data[this.getKey(Object.keys(data))], null, this.columns).then(newResults => {
