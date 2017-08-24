@@ -32,6 +32,9 @@
                 <li><router-link to="/documentation/examples#shorthand-values" active-class="is-active">Shorthand values</router-link></li>
               </ul>
             </li>
+            <li>
+              <router-link to="/documentation/release-notes" active-class="is-active">Release Notes</router-link>
+            </li>
           </ul>
           <p class="menu-label">
             Help

@@ -5,11 +5,12 @@ import Contact from './components/documentation/Contact.vue'
 import Documentation from './components/documentation/Documentation.vue'
 import Examples from './components/documentation/Examples.vue'
 import Groups from './components/data/Groups.vue'
-import Import from './components/import/Import.vue'
-import ImportingData from './components/documentation/ImportingData.vue'
+// import Import from './components/import/Import.vue'
+// import ImportingData from './components/documentation/ImportingData.vue'
 import Introduction from './components/documentation/Introduction.vue'
 import Macros from './components/metadata/Macros.vue'
 import Organizations from './components/data/Organizations.vue'
+import ReleaseNotes from './components/documentation/ReleaseNotes.vue'
 import Tickets from './components/data/Tickets.vue'
 import Triggers from './components/metadata/Triggers.vue'
 import Users from './components/data/Users.vue'
@@ -35,13 +36,14 @@ const router = new VueRouter({
     { path: '/metadata/macros', component: Macros },
     { path: '/metadata/triggers', component: Triggers },
     { path: '/metadata/views', component: Views },
-    { path: '/import', component: Import },
+    // { path: '/import', component: Import },
     { path: '/documentation', component: Documentation, children: [
       { path: '/documentation', redirect: '/documentation/introduction' },
       { path: '/documentation/contact', component: Contact },
       { path: '/documentation/introduction', component: Introduction },
       { path: '/documentation/examples', component: Examples },
-      { path: '/documentation/importing-data', component: ImportingData }
+      { path: '/documentation/release-notes', component: ReleaseNotes }
+      // { path: '/documentation/importing-data', component: ImportingData }
     ] }
   ]
 })
