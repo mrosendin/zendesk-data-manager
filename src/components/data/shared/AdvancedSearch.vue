@@ -151,23 +151,43 @@ export default {
   created () {
     let temp
     bus.$on('dateChanged', (date) => {
-      this.date = Object.values(date).join('')
+      if (date.operator && date.type && date.value) {
+        this.date = Object.values(date).join('')
+      } else {
+        this.date = ''
+      }
     })
     bus.$on('statusChanged', (status) => {
-      temp = Object.values(status)
-      temp.unshift('status')
-      this.status = temp.join('')
+      if (status.operator && status.value) {
+        temp = Object.values(status)
+        temp.unshift('status')
+        this.status = temp.join('')
+      } else {
+        this.status = ''
+      }
     })
     bus.$on('priorityChanged', (priority) => {
-      temp = Object.values(priority)
-      temp.unshift('priority')
-      this.priority = temp.join('')
+      if (priority.operator && priority.value) {
+        temp = Object.values(priority)
+        temp.unshift('priority')
+        this.priority = temp.join('')
+      } else {
+        this.priority = ''
+      }
     })
     bus.$on('ticketTypeChanged', (ticketType) => {
-      this.ticketType = `ticket_type:${ticketType}`
+      if (ticketType) {
+        this.ticketType = `ticket_type:${ticketType}`
+      } else {
+        this.ticketType = ''
+      }
     })
     bus.$on('roleChanged', (role) => {
-      this.role = `role:${role}`
+      if (role) {
+        this.role = `role:${role}`
+      } else {
+        this.role = ''
+      }
     })
   },
   methods: {
