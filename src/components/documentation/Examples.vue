@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h1 id="contact">Advanced Search Examples</h1>
+    <h1 id="examples">Advanced Search Examples</h1>
     <p>Examples of using Advanced Search are shown in this section.</p>
     <h2 id="exact-wording">Exact wording</h2>
     <img src="https://d26dzxoao6i3hh.cloudfront.net/items/0l2B113c3i0Q0O3l2P3d/Image%202017-06-17%20at%204.38.31%20PM.png?v=90de475a">
