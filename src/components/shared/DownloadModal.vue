@@ -121,7 +121,7 @@ export default {
                 break
               case 'json':
                 filename = this.filename + '.json'
-                mimeType = "text/json"
+                mimeType = "application/json"
                 data = JSON.stringify(results)
                 break
               case 'xml':
@@ -140,9 +140,9 @@ export default {
               let blobObject = new Blob([ab], { type: mimeType })
               window.navigator.msSaveOrOpenBlob(blobObject, filename)
             } else if (document.createElement('a').download !== undefined) {
-              data = encodeURI('data:text/csv;charset=utf-8,' + data)
+              let blob = new Blob([data], { type: mimeType })
               link = document.createElement('a')
-              link.setAttribute('href', data)
+              link.setAttribute('href', URL.createObjectURL(blob))
               link.setAttribute('download', filename)
               document.body.appendChild(link)
               link.click()
