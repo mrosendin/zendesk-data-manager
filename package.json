@@ -1,7 +1,7 @@
 {
   "name": "data-manager",
   "description": "A Zendesk application for managing data",
-  "version": "1.1",
+  "version": "1.0.1",
   "author": "Matthew Rosendin <matt@roseware.com>",
   "private": true,
   "scripts": {
