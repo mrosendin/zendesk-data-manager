@@ -10,8 +10,7 @@
 
 ## Table of Contents
 - [Development](#development)
-- [Analytics](#data-analytics)
-- [Billing](#billing)
+  - [Build Setup](#build-setup)
 
 ## Development
 
@@ -30,14 +29,6 @@ npm run build
 cd app && zat server
 ```
 
-## Analytics
-
-Log into [Mixpanel](https://mixpanel.com) to view data analytics.
-
-## Payments
-
-Log into [Stripe](https://dashboard.stripe.com/dashboard) to manage payments.
-
 ---
 
-&copy; Roseware LLC 2017. All rights reserved.
+&copy; Matthew Rosendin 2017. All rights reserved.
