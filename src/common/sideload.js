@@ -81,25 +81,34 @@ const Sideload = {
        */
       let promises = [];
 
-      let replaceData = (key) => {
+      let replaceData = (key, array) => {
+        this.sideloads[key] = []
         return new Promise((resolve, reject) => {
           console.log(`Getting ${key}`)
-          client.request({
-            type: 'GET',
-            url: `/api/v2/${key}/show_many.json?ids=${this.sideloads[key]}`
-          }).then((data) => {
-            console.log(`${key} retrieved.`)
-            this.sideloads[key] = data[key]
-            resolve()
-          }, (response) => {
-            reject()
-          })
+          let i, j, temparray, chunk = 100
+          let current = 0, amount = Math.ceil(array.length / chunk)
+          for (i = 0, j = array.length; i < j; i += chunk) {
+            temparray = array.slice(i, i + chunk)
+            client.request({
+              type: 'GET',
+              url: `/api/v2/${key}/show_many.json?ids=${temparray}`
+            }).then((data) => {
+              this.sideloads[key]= this.sideloads[key].concat(data[key])
+              current += 1
+              if (current == amount) {
+                console.log(`${key} retrieved.`)
+                resolve()
+              }
+            }, (response) => {
+              reject()
+            })
+          }
         })
       }
 
       for (let key in this.sideloads) {
         if (this.sideloads[key].length) {
-          promises.push(replaceData(key));
+          promises.push(replaceData(key, this.sideloads[key].slice()));
         }
       }
 
@@ -114,7 +123,10 @@ const Sideload = {
               let object = this.sideloads[column.sideload.type].find(object => {
                 return object['id'] === result[column.value];
               })
-              if (object) result[column.value] = object.name
+              if (object) {
+                result[column.value] = object.name
+                if (column.value == 'requester_id') result['requester_email'] = object.email
+              }
             } else if (Array.isArray(result[column.value])) {
               // Handle collaborators array
               let collaborators = []
@@ -122,7 +134,7 @@ const Sideload = {
                 let object = this.sideloads[column.sideload.type].find(object => {
                   return object['id'] == id
                 })
-                collaborators.push(object.name)
+                if (object) collaborators.push(object.name)
               }
               result[column.value] = collaborators.join(', ')
             }

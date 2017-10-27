@@ -197,7 +197,8 @@
           :resultCount="resultCount"
           :perPage="perPage"
           :onDelete="onDelete"
-          :onResultsChange="onResultsChange">
+          :onResultsChange="onResultsChange"
+          :isSearch="isSearch">
         </results>
       </div>
     </div>
@@ -215,6 +216,7 @@ import AdvancedSearch from './shared/AdvancedSearch.vue'
 import Results from '../shared/Results.vue'
 import bus from '../../common/bus.js'
 import columns from '../../common/columns.js'
+import config from '../../common/config.js'
 import format from '../../common/format.js'
 
 export default {
@@ -239,6 +241,7 @@ export default {
         success: '',
         error: ''
       },
+      isSearch: false,
       customFields: [],
       filters: {
         group: '',
@@ -262,7 +265,15 @@ export default {
     }
   },
   methods: {
+    checkSettings: async function () {
+      let metadata = await client.metadata()
+
+      if (metadata.settings.requester_email) {
+        this.columns.splice(6, 0, { name: 'Requester Email', value: 'requester_email', selected: true, sideload: {type: 'users'} })
+      }
+    },
     onFetch (results, resultCount) {
+      this.isSearch = true
       format(results, 'tickets', this.columns).then(results => {
         this.results = results
         this.resultCount = resultCount
@@ -317,6 +328,8 @@ export default {
     }
   },
   mounted () {
+    this.checkSettings()
+
     window.tippy('input', {
       position: 'bottom',
       arrow: true

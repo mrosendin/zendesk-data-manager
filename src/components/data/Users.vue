@@ -127,7 +127,8 @@
           :resultCount="resultCount"
           :perPage="perPage"
           :onDelete="onDelete"
-          :onResultsChange="onResultsChange">
+          :onResultsChange="onResultsChange"
+          :isSearch="isSearch">
         </results>
       </div>
     </div>
@@ -166,6 +167,7 @@ export default {
         success: '',
         error: ''
       },
+      isSearch: false,
       filters: {
         name: '',
         group: '',
@@ -185,6 +187,7 @@ export default {
   },
   methods: {
     onFetch (results, resultCount) {
+      this.isSearch = true
       format(results, 'users', this.columns).then(results => {
         this.results = results
         this.resultCount = resultCount

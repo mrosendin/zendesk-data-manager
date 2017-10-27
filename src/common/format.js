@@ -56,7 +56,7 @@ export default function format (results, type, columns) {
             result[fieldKey] = result[key][fieldKey]
           }
         }
-        if (Array.isArray(result[key])) result[key] = result[key].join(', ')
+        if (Array.isArray(result[key]) && key !== 'collaborator_ids') result[key] = result[key].join(', ')
         if (key === 'created_at' || key === 'updated_at') result[key] = new Date(result[key]).toLocaleString()
       }
     })

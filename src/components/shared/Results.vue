@@ -106,7 +106,6 @@ import DownloadModal from './DownloadModal.vue'
 import Pagination from 'vue-2-bulma-pagination'
 import bus from '../../common/bus.js'
 import config from '../../common/config.js'
-import Sideload from '../../common/sideload.js'
 
 export default {
   name: 'results',
@@ -121,6 +120,10 @@ export default {
     },
     type: {
       type: String
+    },
+    isSearch: {
+      type: Boolean,
+      default: false
     },
     resultCount: {
       type: Number,
@@ -146,8 +149,7 @@ export default {
       showDownloadModal: false,
       showWarningModal: false,
       currentPage: 1,
-      url: '',
-      isSearch: false
+      url: ''
     }
   },
   components: { DownloadModal, Pagination },
