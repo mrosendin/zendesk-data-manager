@@ -31,7 +31,8 @@ const Sideload = {
   // This object will contain all ids for replacement
   sideloads: {
     users: [],
-    organizations: []
+    organizations: [],
+    ticket_forms: []
   },
 
   /**
@@ -41,6 +42,7 @@ const Sideload = {
   clearUniqueIds () {
     this.sideloads.users = []
     this.sideloads.organizations = []
+    this.sideloads.ticket_forms = []
   },
 
   /**
@@ -74,8 +76,8 @@ const Sideload = {
       /**
        * Make the API calls. There should be no more than roughly ~400 user ids
        * per page (depending on uniqueness of collaborators), but there will be no
-       * more than 100 organization ids per page. The worst case scenario
-       * should be ~5 requests per page.
+       * more than 100 organization and ticket form ids per page. The worst case
+       * scenario should be ~5 requests per page.
        */
       let promises = [];
 

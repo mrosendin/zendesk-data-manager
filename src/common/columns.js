@@ -69,7 +69,8 @@ export default {
     { name: 'Brand Id', value: 'brand_id', selected: false },
     { name: 'Has Incidents', value: 'has_incidents', selected: false },
     { name: 'Tags', value: 'tags', selected: false },
-    { name: 'Satisfaction Rating', value: 'satisfaction_rating', selected: false }
+    { name: 'Satisfaction Rating', value: 'satisfaction_rating', selected: false },
+    { name: 'Ticket Form Id', value: 'ticket_form_id', selected: false, sideload: {type: 'ticket_forms'} },
   ],
   triggerColumns: [
     { name: 'Id', value: 'id', selected: true },
