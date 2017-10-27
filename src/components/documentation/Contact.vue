@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <h1 id="contact">Contact</h1>
-    <p>Data Manager is an open-source project. To contact the developer, file an issue on <a href="https://github.com/rosendin/data-manager" target="blank">GitHub</a>.</p>
+    <p>To file a bug report or request a feature, email the developer at <a href="mailto:matthew.rosendin@gmail.com">matthew.rosendin@gmail.com</a></p>
   </div>
 </template>
 
