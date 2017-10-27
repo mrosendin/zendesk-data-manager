@@ -2,8 +2,8 @@
   "name": "Data Manager",
   "author": {
     "name": "Matthew Rosendin",
-    "email": "matt@roseware.io",
-    "url": "https://roseware.io"
+    "email": "matthew.rosendin@gmail.com",
+    "url": "https://rosendin.github.io"
   },
   "defaultLocale": "en",
   "private": false,
@@ -17,8 +17,13 @@
       "name": "sideloads",
       "type": "checkbox",
       "default": true
+    },
+    {
+      "name": "requester_email",
+      "type": "checkbox",
+      "default": true
     }
   ],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "frameworkVersion": "2.0"
 }
