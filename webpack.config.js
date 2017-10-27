@@ -3,7 +3,7 @@ var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: ['babel-polyfill', './src/main.js'],
   output: {
     path: path.resolve(__dirname, './app/assets'),
     publicPath: './',
@@ -32,6 +32,9 @@ module.exports = {
           name: '[name].[ext]?[hash]'
         }
       }
+    ],
+    loaders: [
+      { test: /\.jsx?$/, loader: 'babel' }
     ]
   },
   resolve: {
