@@ -156,7 +156,7 @@
           <div class="field">
             <label class="label">Field Value</label>
             <p class="control">
-              <input class="input" type="text" v-model="filters.fieldvalue">
+              <input class="input" type="text" title="Search for any custom field value." v-model="filters.fieldvalue">
             </p>
           </div>
         </div>
@@ -317,6 +317,11 @@ export default {
     }
   },
   mounted () {
+    window.tippy('input', {
+      position: 'bottom',
+      arrow: true
+    })
+
     let url = '/api/v2/tickets.json'
     bus.$emit('url', url)
     client.request(url).then(data => {
