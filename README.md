@@ -10,25 +10,31 @@
 
 ## Table of Contents
 - [Development](#development)
-  - [Build Setup](#build-setup)
+  - [Install Dependencies](#install-dependencies)
+  - [Run the Development Server](#run-the-development-server)
+  - [Build](#build)
 
 ## Development
 
 Data Exporter is a Vue.js 2 app built on the Zendesk Apps Framework v2.0.
 
-### Build Setup
+### Install Dependencies
 
-``` bash
-# Install dependencies
-npm install
-
-# Builds application
-npm run build
-
-# Run ZAT server, navigate to https://roseware.zendesk.com/agent/apps/data-manager?zat=true
-cd app && zat server
+```
+$ npm install
 ```
 
----
+### Run the Development Server
 
-&copy; Matthew Rosendin 2017. All rights reserved.
+Run ZAT (Zendesk App Tools) server. Navigate to `https://subdomain.zendesk.com/agent/apps/data-manager?zat=true`
+
+```
+$ cd app && zat server
+```
+
+### Build
+
+``` bash
+$ npm run build
+```
+
