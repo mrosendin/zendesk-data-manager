@@ -10,7 +10,8 @@
         <div class="center-inline-filters">
           <status-filter></status-filter>
           <priority-filter></priority-filter>
-          <date-filter></date-filter>
+          <date-filter :index="1"></date-filter>
+          <date-filter :index="2"></date-filter>
           <ticket-type-filter></ticket-type-filter>
         </div>
       </div>
@@ -206,21 +207,21 @@
 </template>
 
 <script>
-import DateFilter from './filters/DateFilter.vue'
-import StatusFilter from './filters/StatusFilter.vue'
-import PriorityFilter from './filters/PriorityFilter.vue'
-import TicketTypeFilter from './filters/TicketTypeFilter.vue'
-import Typeahead from 'vue-bulma-typeahead'
-import ColumnSelection from '../shared/ColumnSelection.vue'
-import AdvancedSearch from './shared/AdvancedSearch.vue'
-import Results from '../shared/Results.vue'
-import bus from '../../common/bus.js'
-import columns from '../../common/columns.js'
-import config from '../../common/config.js'
-import format from '../../common/format.js'
+import DateFilter from "./filters/DateFilter.vue";
+import StatusFilter from "./filters/StatusFilter.vue";
+import PriorityFilter from "./filters/PriorityFilter.vue";
+import TicketTypeFilter from "./filters/TicketTypeFilter.vue";
+import Typeahead from "vue-bulma-typeahead";
+import ColumnSelection from "../shared/ColumnSelection.vue";
+import AdvancedSearch from "./shared/AdvancedSearch.vue";
+import Results from "../shared/Results.vue";
+import bus from "../../common/bus.js";
+import columns from "../../common/columns.js";
+import config from "../../common/config.js";
+import format from "../../common/format.js";
 
 export default {
-  name: 'tickets',
+  name: "tickets",
   components: {
     StatusFilter,
     PriorityFilter,
@@ -231,129 +232,156 @@ export default {
     AdvancedSearch,
     Results
   },
-  data () {
+  data() {
     return {
       columns: columns.ticketColumns,
       results: [],
       resultCount: 0,
       perPage: 100,
       messages: {
-        success: '',
-        error: ''
+        success: "",
+        error: ""
       },
       isSearch: false,
       customFields: [],
       filters: {
-        group: '',
-        organization: '',
-        commenter: '',
-        subject: '',
-        tags: '',
-        assignee: '',
-        requester: '',
-        cc: '',
-        description: '',
-        via: '',
-        brand: '',
-        fieldvalue: ''
+        group: "",
+        organization: "",
+        commenter: "",
+        subject: "",
+        tags: "",
+        assignee: "",
+        requester: "",
+        cc: "",
+        description: "",
+        via: "",
+        brand: "",
+        fieldvalue: ""
       },
       autocomplete: {
         organizations: [],
         users: [],
         tags: []
       }
-    }
+    };
   },
   methods: {
-    checkSettings: async function () {
-      let metadata = await client.metadata()
+    checkSettings: async function() {
+      let metadata = await client.metadata();
 
       if (metadata.settings.requester_email) {
-        this.columns.splice(6, 0, { name: 'Requester Email', value: 'requester_email', selected: true, sideload: {type: 'users'} })
+        this.columns.splice(6, 0, {
+          name: "Requester Email",
+          value: "requester_email",
+          selected: true,
+          sideload: { type: "users" }
+        });
       }
     },
-    onFetch (results, resultCount) {
-      this.isSearch = true
-      format(results, 'tickets', this.columns).then(results => {
-        this.results = results
-        this.resultCount = resultCount
-        this.perPage = 100
-      })
+    onFetch(results, resultCount) {
+      console.log("Result Count:", resultCount);
+      this.isSearch = true;
+      format(results, "tickets", this.columns).then(results => {
+        this.results = results;
+        this.resultCount = resultCount;
+        this.perPage = 100;
+      });
     },
-    onDelete (ids) {
-      let count = ids.length
-      ids.forEach((id) => {
-        client.request({
-          url: `/api/v2/tickets/destroy_many.json?ids=${ids.join(',')}`,
-          method: 'DELETE'
-        }).then(() => {
-          this.resultCount--
-          this.results = this.results.filter((result) => {
-            return !ids.includes(result.id)
+    onDelete(ids) {
+      let count = ids.length;
+      ids.forEach(id => {
+        client
+          .request({
+            url: `/api/v2/tickets/destroy_many.json?ids=${ids.join(",")}`,
+            method: "DELETE"
           })
-          if (count > 1) this.messages.success = `${count} tickets have been deleted.`
-          else this.messages.success = `${count} ticket has been deleted.`
-        })
-      })
+          .then(() => {
+            this.resultCount--;
+            this.results = this.results.filter(result => {
+              return !ids.includes(result.id);
+            });
+            if (count > 1)
+              this.messages.success = `${count} tickets have been deleted.`;
+            else this.messages.success = `${count} ticket has been deleted.`;
+          });
+      });
     },
-    onResultsChange (results) {
-      format(results, 'tickets', this.columns).then(results => {
-        this.results = results
-      })
+    onResultsChange(results) {
+      format(results, "tickets", this.columns).then(results => {
+        this.results = results;
+      });
     },
-    onChange (value, name) {
-      this.filters[name] = value
+    onChange(value, name) {
+      this.filters[name] = value;
 
       let url;
       let resource;
 
-      if (name === 'tags') {
-        resource = 'tags'
-        url = `/api/v2/autocomplete/tags.json?name=${value}`
+      if (name === "tags") {
+        resource = "tags";
+        url = `/api/v2/autocomplete/tags.json?name=${value}`;
       } else {
-        resource = (name === 'organization' ? 'organizations' : 'users')
-        url = `/api/v2/${resource}/autocomplete.json?name=${value}`
+        resource = name === "organization" ? "organizations" : "users";
+        url = `/api/v2/${resource}/autocomplete.json?name=${value}`;
       }
 
-      client.request(url).then(response => {
-        if (response[resource].length) {
-          this.autocomplete[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
-        }
-      }).catch(error => {
-        console.log(error)
-      })
+      client
+        .request(url)
+        .then(response => {
+          if (response[resource].length) {
+            this.autocomplete[resource] = response[resource][0].hasOwnProperty(
+              "name"
+            )
+              ? response[resource].map(item => item.name)
+              : response[resource];
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    onSelect (value, name) {
-      this.filters[name] = value
+    onSelect(value, name) {
+      this.filters[name] = value;
     }
   },
-  mounted () {
-    this.checkSettings()
+  mounted() {
+    this.checkSettings();
 
-    window.tippy('input', {
-      position: 'bottom',
+    window.tippy("input", {
+      position: "bottom",
       arrow: true
-    })
+    });
 
-    let url = '/api/v2/tickets.json'
-    bus.$emit('url', url)
-    client.request(url).then(data => {
-      format(data.tickets, 'tickets', this.columns).then(results => {
-        this.results = results
-        this.resultCount = data.count
-        this.perPage = 100
+    let url = "/api/v2/tickets.json";
+    bus.$emit("url", url);
+    client
+      .request(url)
+      .then(data => {
+        format(data.tickets, "tickets", this.columns).then(results => {
+          this.results = results;
+          this.resultCount = data.count;
+          this.perPage = 100;
+        });
       })
-    }).catch(error => {
-      console.log(error)
-    })
+      .catch(error => {
+        console.log(error);
+      });
   },
-  beforeCreate () {
-    let defaultFields = ['subject', 'description', 'status', 'tickettype', 'priority', 'group', 'assignee'];
-    client.request('/api/v2/ticket_fields.json').then((data) => {
-      let customFields = data.ticket_fields.filter((field) => {
+  beforeCreate() {
+    let defaultFields = [
+      "subject",
+      "description",
+      "status",
+      "tickettype",
+      "priority",
+      "group",
+      "assignee"
+    ];
+    client.request("/api/v2/ticket_fields.json").then(data => {
+      let customFields = data.ticket_fields.filter(field => {
         return !defaultFields.includes(field.type) && field.active;
       });
-      this.customFields = customFields.map((field) => {
+      this.customFields = customFields.map(field => {
         return {
           name: field.title,
           value: `custom_field_${field.id}`,
@@ -362,5 +390,5 @@ export default {
       });
     });
   }
-}
+};
 </script>

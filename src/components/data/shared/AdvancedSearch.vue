@@ -104,105 +104,120 @@
 </template>
 
 <script>
-import bus from '../../../common/bus.js'
+import bus from "../../../common/bus.js";
 
 const reduce = Function.bind.call(Function.call, Array.prototype.reduce);
-const isEnumerable = Function.bind.call(Function.call, Object.prototype.propertyIsEnumerable);
+const isEnumerable = Function.bind.call(
+  Function.call,
+  Object.prototype.propertyIsEnumerable
+);
 const concat = Function.bind.call(Function.call, Array.prototype.concat);
 const keys = Reflect.ownKeys;
 
 if (!Object.values) {
   Object.values = function values(O) {
-    return reduce(keys(O), (v, k) => concat(v, typeof k === 'string' && isEnumerable(O, k) ? [O[k]] : []), []);
+    return reduce(
+      keys(O),
+      (v, k) =>
+        concat(v, typeof k === "string" && isEnumerable(O, k) ? [O[k]] : []),
+      []
+    );
   };
 }
 
 export default {
-  name: 'advanced-search',
-  data () {
+  name: "advanced-search",
+  data() {
     return {
-      keywords: '',
-      error: '',
-      date: '',
-      status: '',
-      priority: '',
-      ticketType: '',
-      role: '',
-      sortBy: '',
-      order: ''
-    }
+      keywords: "",
+      error: "",
+      date1: "",
+      date2: "",
+      status: "",
+      priority: "",
+      ticketType: "",
+      role: "",
+      sortBy: "",
+      order: ""
+    };
   },
   computed: {
-    query () {
-      let result = [`type:${this.type}`]
-      if (this.keywords) result.push(`${this.keywords}`)
-      if (this.date) result.push(`${this.date}`)
-      if (this.status) result.push(`${this.status}`)
-      if (this.priority) result.push(`${this.priority}`)
-      if (this.ticketType) result.push(`${this.ticketType}`)
-      if (this.role) result.push(`${this.role}`)
+    query() {
+      let result = [`type:${this.type}`];
+      if (this.keywords) result.push(`${this.keywords}`);
+      if (this.date1) result.push(`${this.date1}`);
+      if (this.date2) result.push(`${this.date2}`);
+      if (this.status) result.push(`${this.status}`);
+      if (this.priority) result.push(`${this.priority}`);
+      if (this.ticketType) result.push(`${this.ticketType}`);
+      if (this.role) result.push(`${this.role}`);
       for (var key in this.filters) {
         if (this.filters[key]) result.push(`${key}:${this.filters[key]}`);
       }
-      result = `${result.join(' ')}`
-      return result
+      result = `${result.join(" ")}`;
+      return result;
     }
   },
-  created () {
-    let temp
-    bus.$on('dateChanged', (date) => {
+  created() {
+    let temp;
+    bus.$on("dateChanged", date => {
+      let index = date.index;
+      delete date.index;
       if (date.operator && date.type && date.value) {
-        this.date = Object.values(date).join('')
+        this[`date${index}`] = Object.values(date).join("");
       } else {
-        this.date = ''
+        this[`date${index}`] = "";
       }
-    })
-    bus.$on('statusChanged', (status) => {
+    });
+    bus.$on("statusChanged", status => {
       if (status.operator && status.value) {
-        temp = Object.values(status)
-        temp.unshift('status')
-        this.status = temp.join('')
+        temp = Object.values(status);
+        temp.unshift("status");
+        this.status = temp.join("");
       } else {
-        this.status = ''
+        this.status = "";
       }
-    })
-    bus.$on('priorityChanged', (priority) => {
+    });
+    bus.$on("priorityChanged", priority => {
       if (priority.operator && priority.value) {
-        temp = Object.values(priority)
-        temp.unshift('priority')
-        this.priority = temp.join('')
+        temp = Object.values(priority);
+        temp.unshift("priority");
+        this.priority = temp.join("");
       } else {
-        this.priority = ''
+        this.priority = "";
       }
-    })
-    bus.$on('ticketTypeChanged', (ticketType) => {
+    });
+    bus.$on("ticketTypeChanged", ticketType => {
       if (ticketType) {
-        this.ticketType = `ticket_type:${ticketType}`
+        this.ticketType = `ticket_type:${ticketType}`;
       } else {
-        this.ticketType = ''
+        this.ticketType = "";
       }
-    })
-    bus.$on('roleChanged', (role) => {
+    });
+    bus.$on("roleChanged", role => {
       if (role) {
-        this.role = `role:${role}`
+        this.role = `role:${role}`;
       } else {
-        this.role = ''
+        this.role = "";
       }
-    })
+    });
   },
   methods: {
-    search () {
-      mixpanel.track(`Searching for ${this.type}`)
+    search() {
+      mixpanel.track(`Searching for ${this.type}`);
 
-      let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`
-      if (this.sortBy) url += `&sort_by=${this.sortBy}`
-      if (this.order) url += `&sort_order=${this.order}`
-      bus.$emit('url', url)
-      client.request(url).then((data) => {
-        this.onFetch(data.results, data.count)
-      }).catch((error) => {
-        this.error = error.responseJSON.description
-      })
+      let url = `/api/v2/search.json?query=${encodeURIComponent(this.query)}`;
+      if (this.sortBy) url += `&sort_by=${this.sortBy}`;
+      if (this.order) url += `&sort_order=${this.order}`;
+      bus.$emit("url", url);
+      client
+        .request(url)
+        .then(data => {
+          this.onFetch(data.results, data.count);
+        })
+        .catch(error => {
+          this.error = error.responseJSON.description;
+        });
     }
   },
   props: {
@@ -217,11 +232,13 @@ export default {
       type: Function
     }
   }
-}
+};
 </script>
 
 <style scoped>
-#sortBy, #order, #search {
+#sortBy,
+#order,
+#search {
   border: none !important;
   width: 150px;
 }

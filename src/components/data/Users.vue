@@ -8,7 +8,7 @@
 
       <div class="columns">
         <div class="center-inline-filters">
-          <date-filter></date-filter>
+          <date-filter :index="1"></date-filter>
           <role-filter></role-filter>
         </div>
       </div>
@@ -136,18 +136,18 @@
 </template>
 
 <script>
-import DateFilter from './filters/DateFilter.vue'
-import RoleFilter from './filters/RoleFilter.vue'
-import Typeahead from 'vue-bulma-typeahead'
-import ColumnSelection from '../shared/ColumnSelection.vue'
-import AdvancedSearch from './shared/AdvancedSearch.vue'
-import Results from '../shared/Results.vue'
-import bus from '../../common/bus.js'
-import columns from '../../common/columns.js'
-import format from '../../common/format.js'
+import DateFilter from "./filters/DateFilter.vue";
+import RoleFilter from "./filters/RoleFilter.vue";
+import Typeahead from "vue-bulma-typeahead";
+import ColumnSelection from "../shared/ColumnSelection.vue";
+import AdvancedSearch from "./shared/AdvancedSearch.vue";
+import Results from "../shared/Results.vue";
+import bus from "../../common/bus.js";
+import columns from "../../common/columns.js";
+import format from "../../common/format.js";
 
 export default {
-  name: 'users',
+  name: "users",
   components: {
     DateFilter,
     RoleFilter,
@@ -156,7 +156,7 @@ export default {
     AdvancedSearch,
     Results
   },
-  data () {
+  data() {
     return {
       columns: columns.userColumns,
       customFields: [],
@@ -164,104 +164,117 @@ export default {
       resultCount: 0,
       perPage: 100,
       messages: {
-        success: '',
-        error: ''
+        success: "",
+        error: ""
       },
       isSearch: false,
       filters: {
-        name: '',
-        group: '',
-        organization: '',
-        notes: '',
-        details: '',
-        external_id: '',
-        phone: '',
-        tags: ''
+        name: "",
+        group: "",
+        organization: "",
+        notes: "",
+        details: "",
+        external_id: "",
+        phone: "",
+        tags: ""
       },
       autocomplete: {
         organizations: [],
         users: [],
         tags: []
       }
-    }
+    };
   },
   methods: {
-    onFetch (results, resultCount) {
-      this.isSearch = true
-      format(results, 'users', this.columns).then(results => {
-        this.results = results
-        this.resultCount = resultCount
-        this.perPage = 100
-      })
+    onFetch(results, resultCount) {
+      this.isSearch = true;
+      format(results, "users", this.columns).then(results => {
+        this.results = results;
+        this.resultCount = resultCount;
+        this.perPage = 100;
+      });
     },
-    onDelete (ids) {
-      let count = ids.length
-      ids.forEach((id) => {
-        client.request({
-          url: `/api/v2/users/destroy_many.json?ids=${ids.join(',')}`,
-          method: 'DELETE'
-        }).then(() => {
-          this.resultCount--
-          this.results = this.results.filter((result) => {
-            return !ids.includes(result.id)
+    onDelete(ids) {
+      let count = ids.length;
+      ids.forEach(id => {
+        client
+          .request({
+            url: `/api/v2/users/destroy_many.json?ids=${ids.join(",")}`,
+            method: "DELETE"
           })
-          if (count > 1) this.messages.success = `${count} users have been deleted.`
-          else this.messages.success = `${count} user has been deleted.`
-        })
-      })
+          .then(() => {
+            this.resultCount--;
+            this.results = this.results.filter(result => {
+              return !ids.includes(result.id);
+            });
+            if (count > 1)
+              this.messages.success = `${count} users have been deleted.`;
+            else this.messages.success = `${count} user has been deleted.`;
+          });
+      });
     },
-    onResultsChange (results) {
-      format(results, 'users', this.columns).then(results => {
-        this.results = results
-      })
+    onResultsChange(results) {
+      format(results, "users", this.columns).then(results => {
+        this.results = results;
+      });
     },
-    onChange (value, name) {
-      this.filters[name] = value
+    onChange(value, name) {
+      this.filters[name] = value;
 
       let url;
       let resource;
 
-      if (name === 'tags') {
-        resource = 'tags'
-        url = `/api/v2/autocomplete/tags.json?name=${value}`
+      if (name === "tags") {
+        resource = "tags";
+        url = `/api/v2/autocomplete/tags.json?name=${value}`;
       } else {
-        resource = (name === 'organization' ? 'organizations' : 'users')
-        url = `/api/v2/${resource}/autocomplete.json?name=${value}`
+        resource = name === "organization" ? "organizations" : "users";
+        url = `/api/v2/${resource}/autocomplete.json?name=${value}`;
       }
 
-      client.request(url).then(response => {
-        this.autocomplete[resource] = (response[resource][0].hasOwnProperty('name') ? response[resource].map(item => item.name) : response[resource])
-      }).catch(error => {
-        console.log(error)
-      })
+      client
+        .request(url)
+        .then(response => {
+          this.autocomplete[resource] = response[resource][0].hasOwnProperty(
+            "name"
+          )
+            ? response[resource].map(item => item.name)
+            : response[resource];
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    onSelect (value, name) {
-      this.filters[name] = value
+    onSelect(value, name) {
+      this.filters[name] = value;
     }
   },
-  mounted () {
-    let url = '/api/v2/users.json'
-    bus.$emit('url', url)
-    client.request(url).then(data => {
-      format(data.users, 'users', this.columns).then(results => {
-        this.results = results
-        this.resultCount = data.count
-        this.perPage = 100
+  mounted() {
+    let url = "/api/v2/users.json";
+    bus.$emit("url", url);
+    client
+      .request(url)
+      .then(data => {
+        format(data.users, "users", this.columns).then(results => {
+          this.results = results;
+          this.resultCount = data.count;
+          this.perPage = 100;
+        });
       })
-    }).catch(error => {
-      console.log(error)
-    })
+      .catch(error => {
+        console.log(error);
+      });
   },
-  beforeCreate () {
-    client.request('/api/v2/user_fields.json').then((data) => {
-      this.customFields = data.user_fields.map((field) => {
+  beforeCreate() {
+    client.request("/api/v2/user_fields.json").then(data => {
+      this.customFields = data.user_fields.map(field => {
         return {
           name: field.title,
           value: field.key,
           selected: false
-        }
-      })
-    })
+        };
+      });
+    });
   }
-}
+};
 </script>

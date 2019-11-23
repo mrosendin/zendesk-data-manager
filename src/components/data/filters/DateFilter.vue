@@ -47,40 +47,44 @@
 </template>
 
 <script>
-import bus from '../../../common/bus.js'
-import Datepicker from 'vuejs-datepicker'
+import bus from "../../../common/bus.js";
+import Datepicker from "vuejs-datepicker";
 
 export default {
-  name: 'date-filter',
+  name: "date-filter",
   components: { Datepicker },
-  data () {
+  data() {
     return {
       date: {
-        type: '',
-        operator: '',
-        value: ''
+        type: "",
+        operator: "",
+        value: ""
       },
       useDefault: true
-    }
+    };
   },
   methods: {
-    update (key, value) {
-      this.date[key] = value
-      bus.$emit('dateChanged', this.date)
+    update(key, value) {
+      this.date[key] = value;
+      this.date.index = this.index;
+      bus.$emit("dateChanged", this.date);
     },
-    onDefaultDatepickerSelected (date) {
-      date = date.toISOString().split('T')[0]
-      this.date.value = date
-      bus.$emit('dateChanged', this.date)
+    onDefaultDatepickerSelected(date) {
+      date = date.toISOString().split("T")[0];
+      this.date.value = date;
+      bus.$emit("dateChanged", this.date);
     }
   },
-  created () {
+  created() {
     // Detect missing browser features and update as necessary
     if (!Modernizr.inputtypes.date) {
-      this.useDefault = false
+      this.useDefault = false;
     }
+  },
+  props: {
+    index: Number
   }
-}
+};
 </script>
 
 <style scoped>
