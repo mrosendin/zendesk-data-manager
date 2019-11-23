@@ -8,6 +8,9 @@
           <button class="delete" @click="onClose"></button>
         </header>
         <section class="modal-card-body">
+          <div class="notification is-warning">
+            Warning! Searches with > 1,000 results will fail to download due to Zendesk's <a href="https://develop.zendesk.com/hc/en-us/articles/360022563994--BREAKING-New-Search-API-Result-Limits">New Search API Result Limits</a> breaking change.
+          </div>
           <div class="notification is-warning" v-if="warningMessage">
             <button class="delete" @click="warningMessage = ''"></button>
             {{ warningMessage }}
@@ -63,12 +66,12 @@
 </template>
 
 <script>
-import axios from 'axios'
-import config from '../../common/config.js'
-import format from '../../common/format.js'
+import axios from "axios";
+import config from "../../common/config.js";
+import format from "../../common/format.js";
 
 export default {
-  name: 'download-modal',
+  name: "download-modal",
   props: {
     show: {
       default: false,
@@ -84,146 +87,181 @@ export default {
       type: Array
     }
   },
-  data () {
+  data() {
     return {
-      filename: '',
-      fileType: 'csv',
-      warningMessage: '',
+      filename: "",
+      fileType: "csv",
+      warningMessage: "",
       inProgress: false,
       progress: 0
-    }
+    };
   },
   methods: {
-    start () {
+    start() {
       if (!this.filename) {
-        this.warningMessage = 'You must set a file name to begin the download.'
-        return
+        this.warningMessage = "You must set a file name to begin the download.";
+        return;
       }
 
-      this.inProgress = true
+      this.inProgress = true;
 
-      let url = `https://${config.currentAccount.subdomain}.zendesk.com` + this.url
+      let url =
+        `https://${config.currentAccount.subdomain}.zendesk.com` + this.url;
 
       client.request(url).then(data => {
-        this.perPage = Object.keys(data).includes('articles') ? 30 : 100
-        let currentPage = 1
-        this.progress = ((currentPage/Math.ceil(data.count/this.perPage))*100).toPrecision(3)
+        this.perPage = Object.keys(data).includes("articles") ? 30 : 100;
+        let currentPage = 1;
+        this.progress = (
+          (currentPage / Math.ceil(data.count / this.perPage)) *
+          100
+        ).toPrecision(3);
 
-        format(data[this.getKey(Object.keys(data))], null, this.columns).then(results => {
-          this.extend(results, data.next_page, Math.ceil(data.count/this.perPage), currentPage, results => {
-            let filename, link, data, mimeType
+        format(data[this.getKey(Object.keys(data))], null, this.columns).then(
+          results => {
+            this.extend(
+              results,
+              data.next_page,
+              Math.ceil(data.count / this.perPage),
+              currentPage,
+              results => {
+                let filename, link, data, mimeType;
 
-            switch (this.fileType) {
-              case 'csv':
-                filename = this.filename + '.csv'
-                mimeType = "text/csv"
-                data = this.convertToCSV(results)
-                break
-              case 'json':
-                filename = this.filename + '.json'
-                mimeType = "application/json"
-                data = JSON.stringify(results)
-                break
-              case 'xml':
-                filename = this.filename + '.xml'
-                mimeType = "text/xml"
-                let x2js = new X2JS()
-                data = x2js.json2xml_str(results)
-                break
-            }
-            if (window.Blob && window.navigator.msSaveOrOpenBlob) {
-              let ab = new ArrayBuffer(data.length)
-              let ia = new Uint8Array(ab)
-              for (let i = 0; i < data.length; i++) {
-                ia[i] = data.charCodeAt(i);
+                switch (this.fileType) {
+                  case "csv":
+                    filename = this.filename + ".csv";
+                    mimeType = "text/csv";
+                    data = this.convertToCSV(results);
+                    break;
+                  case "json":
+                    filename = this.filename + ".json";
+                    mimeType = "application/json";
+                    data = JSON.stringify(results);
+                    break;
+                  case "xml":
+                    filename = this.filename + ".xml";
+                    mimeType = "text/xml";
+                    let x2js = new X2JS();
+                    data = x2js.json2xml_str(results);
+                    break;
+                }
+                if (window.Blob && window.navigator.msSaveOrOpenBlob) {
+                  let ab = new ArrayBuffer(data.length);
+                  let ia = new Uint8Array(ab);
+                  for (let i = 0; i < data.length; i++) {
+                    ia[i] = data.charCodeAt(i);
+                  }
+                  let blobObject = new Blob([ab], { type: mimeType });
+                  window.navigator.msSaveOrOpenBlob(blobObject, filename);
+                } else if (document.createElement("a").download !== undefined) {
+                  let blob = new Blob([data], { type: mimeType });
+                  link = document.createElement("a");
+                  link.setAttribute("href", URL.createObjectURL(blob));
+                  link.setAttribute("download", filename);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+                this.progress = 0;
+                this.inProgress = false;
+                this.onClose();
               }
-              let blobObject = new Blob([ab], { type: mimeType })
-              window.navigator.msSaveOrOpenBlob(blobObject, filename)
-            } else if (document.createElement('a').download !== undefined) {
-              let blob = new Blob([data], { type: mimeType })
-              link = document.createElement('a')
-              link.setAttribute('href', URL.createObjectURL(blob))
-              link.setAttribute('download', filename)
-              document.body.appendChild(link)
-              link.click()
-              document.body.removeChild(link)
-            }
-            this.progress = 0
-            this.inProgress = false
-            this.onClose()
-          })
-        })
-      })
+            );
+          }
+        );
+      });
     },
-    cancel () {
-      this.inProgress = false
-      this.onClose()
+    cancel() {
+      this.inProgress = false;
+      this.onClose();
     },
-    convertToCSV (results) {
-      let result, counter
-      let keys = []
-      let header = []
+    convertToCSV(results) {
+      let result, counter;
+      let keys = [];
+      let header = [];
 
       if (results == null || !results.length) {
-        new Error('The results passed into convertToCSV are null or 0 length.')
+        new Error("The results passed into convertToCSV are null or 0 length.");
       }
 
       this.columns.forEach(column => {
         if (column.selected) {
-          header.push(column.name)
-          keys.push(column.value)
+          header.push(column.name);
+          keys.push(column.value);
         }
-      })
+      });
 
-      result = ''
-      result += header.join(',')
-      result += '\n'
+      result = "";
+      result += header.join(",");
+      result += "\n";
 
       results.forEach(r => {
-        counter = 0
+        counter = 0;
         keys.forEach(key => {
-          if (counter > 0) result += ','
+          if (counter > 0) result += ",";
           if (r[key]) {
-            if (typeof r[key] == 'string') {
-              r[key] = r[key].replace(/"/g, '""')  // Escape commas and quotes
-              if (r[key].search(/("|,|\n)/g) >= 0) r[key] = '"' + r[key] + '"'
+            if (typeof r[key] == "string") {
+              r[key] = r[key].replace(/"/g, '""'); // Escape commas and quotes
+              if (r[key].search(/("|,|\n)/g) >= 0) r[key] = '"' + r[key] + '"';
             }
             result += r[key];
           }
           counter++;
-        })
-        result += '\n'
-      })
-      return result
+        });
+        result += "\n";
+      });
+      return result;
     },
-    extend (results, nextPage, totalPages, currentPage, callback) {
+    extend(results, nextPage, totalPages, currentPage, callback) {
       if (nextPage != null && this.inProgress) {
-        client.request(nextPage).then((data) => {
+        client.request(nextPage).then(data => {
           currentPage += 1;
-          format(data[this.getKey(Object.keys(data))], null, this.columns).then(newResults => {
-            results = results.concat(newResults);
-            this.progress = ((currentPage/Math.ceil(data.count/this.perPage))*100).toPrecision(3)
-            this.extend(results, data.next_page, totalPages, currentPage++, callback)
-          });
+          format(data[this.getKey(Object.keys(data))], null, this.columns).then(
+            newResults => {
+              results = results.concat(newResults);
+              this.progress = (
+                (currentPage / Math.ceil(data.count / this.perPage)) *
+                100
+              ).toPrecision(3);
+              this.extend(
+                results,
+                data.next_page,
+                totalPages,
+                currentPage++,
+                callback
+              );
+            }
+          );
         });
       } else {
         callback(results);
       }
     },
-    getKey (keys) {
-      let validKeys = ['articles', 'tickets', 'users', 'organizations', 'groups', 'users', 'results', 'views', 'automations', 'triggers', 'macros']
+    getKey(keys) {
+      let validKeys = [
+        "articles",
+        "tickets",
+        "users",
+        "organizations",
+        "groups",
+        "users",
+        "results",
+        "views",
+        "automations",
+        "triggers",
+        "macros"
+      ];
       let key = keys.find(key => {
-        return validKeys.includes(key)
-      })
-      return key
+        return validKeys.includes(key);
+      });
+      return key;
     }
   },
   computed: {
-    fileExtension () {
-      return `.${this.fileType}`
+    fileExtension() {
+      return `.${this.fileType}`;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -231,7 +269,8 @@ export default {
   justify-content: flex-end;
 }
 @media screen and (min-width: 769px) {
-  .modal-content, .modal-card {
+  .modal-content,
+  .modal-card {
     margin: 0 20px !important;
   }
 }
