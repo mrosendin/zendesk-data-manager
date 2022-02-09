@@ -40,6 +40,8 @@ $ npm run build
 
 ### Publish
 
+Update `version` in `app/manifest.json`
+
 Zip the app:
 
 ```
