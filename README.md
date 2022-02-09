@@ -38,3 +38,12 @@ $ cd app && zat server
 $ npm run build
 ```
 
+### Publish
+
+Zip the app:
+
+```
+zip -r app.zip app
+```
+
+Upload zip on the [Zendesk Developer Portal](https://apps.zendesk.com)
